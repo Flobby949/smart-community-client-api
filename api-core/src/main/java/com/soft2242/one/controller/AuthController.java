@@ -50,7 +50,7 @@ public class AuthController {
     public Result<String> forgetPassword(String mobile, String password, String code) {
         boolean forget = authService.forgetPassword(mobile, password, code);
         if (!forget) {
-            return Result.error("修改失败");
+            return Result.error("修改密码失败，请重试");
         }
         return Result.ok();
     }
