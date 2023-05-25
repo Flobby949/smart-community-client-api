@@ -2,15 +2,11 @@ package com.soft2242.one.controller;
 
 import com.soft2242.one.common.utils.Result;
 import com.soft2242.one.service.AuthService;
-import com.soft2242.one.vo.AccountLoginVO;
-import com.soft2242.one.vo.SysTokenVO;
+import com.soft2242.one.vo.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author : Flobby
@@ -36,8 +32,8 @@ public class AuthController {
     @PostMapping("send/code")
     @Operation(summary = "发送验证码")
     // 0 忘记密码 1 登录
-    public Result<String> sendCode(String mobile, Integer type) {
-        boolean send = authService.sendCode(mobile, type);
+    public Result<String> sendCode(@RequestBody SendPhoneVo sendPhoneVo) {
+        boolean send = authService.sendCode(sendPhoneVo);
         System.out.println(send);
         if (!send) {
             return Result.error("发送失败");
@@ -47,8 +43,8 @@ public class AuthController {
 
     @PostMapping("forget/password")
     @Operation(summary = "忘记密码")
-    public Result<String> forgetPassword(String mobile, String password, String code) {
-        boolean forget = authService.forgetPassword(mobile, password, code);
+    public Result<String> forgetPassword(@RequestBody ForgetVo forgetVo) {
+        boolean forget = authService.forgetPassword(forgetVo);
         if (!forget) {
             return Result.error("修改密码失败，请重试");
         }
@@ -57,8 +53,8 @@ public class AuthController {
 
     @PostMapping("phone/login")
     @Operation(summary = "手机号登录")
-    public Result<SysTokenVO> phoneLogin(String mobile, String code) {
-        SysTokenVO token = authService.loginByPhone(mobile, code);
+    public Result<SysTokenVO> phoneLogin(@RequestBody PhoneLoginVo phoneLoginVo) {
+        SysTokenVO token = authService.loginByPhone(phoneLoginVo);
         return Result.ok(token);
     }
 }

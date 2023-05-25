@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+
 /**
  * 短信服务类
  */
@@ -18,6 +19,8 @@ import java.util.Map;
 public class SmsService {
     @Resource
     private SmsConfig smsConfig;
+
+
 
     /**
      * 发送短信

@@ -1,10 +1,19 @@
 package com.soft2242.one.vo;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
 /**
-* @program : community-client-api
-* @description : 
-* @author : Ahang
-* @create : 2023-05-25 14:25
-**/
- 
+ * @author : Ahang
+ * @program : community-client-api
+ * @description :
+ * @create : 2023-05-25 14:25
+ **/
+@Data
+@AllArgsConstructor
+@Builder
 public class PhoneLoginVo {
+    private String mobile;
+    private String code;
 }

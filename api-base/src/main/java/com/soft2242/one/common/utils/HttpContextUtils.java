@@ -66,4 +66,10 @@ public class HttpContextUtils {
         assert request != null;
         return request.getHeader(HttpHeaders.ORIGIN);
     }
+
+    public static String getDeviceToken() {
+        HttpServletRequest request = getHttpServletRequest();
+        assert request != null;
+        return request.getHeader("device-token");
+    }
 }
