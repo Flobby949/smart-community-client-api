@@ -9,7 +9,7 @@ spring:
   datasource:
     # MySQL8
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/db_community?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+    url: jdbc:mysql://106.14.246.27:3306/db_community?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
     username: root
     password: kobe24
     hikari:
@@ -44,3 +44,12 @@ storage:
     secret-key: 12345678
     end-point: http://106.14.246.27:9000
     bucket-name: flobby
+
+
+aliyun:
+  sms:
+    platform: 0
+    signName: ahang666
+    templateId: SMS_460700333
+    accessKey: LTAI5tPABZkxHTWoSkojGJAd
+    secretKey: g6dJysuJh2vuAYfkQAM9TeU3UOPeit

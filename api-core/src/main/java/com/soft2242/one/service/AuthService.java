@@ -32,5 +32,15 @@ public interface AuthService {
      * @param mobile 手机号
      * @return boolean
      */
-    boolean sendCode(String mobile);
+    boolean sendCode(String mobile,Integer type);
+
+    /**
+     * 忘记密码
+     *
+     * @param mobile   手机号
+     * @param password 密码
+     * @param code     验证码
+     * @return boolean
+     */
+    boolean forgetPassword(String mobile, String password, String code);
 }

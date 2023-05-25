@@ -1,5 +1,6 @@
 package com.soft2242.one.service;
 
+import com.soft2242.one.entity.AccountEntity;
 import com.soft2242.one.entity.UserEntity;
 import com.soft2242.one.mybatis.service.BaseService;
 
@@ -11,4 +12,5 @@ import com.soft2242.one.mybatis.service.BaseService;
  **/
 
 public interface UserService extends BaseService<UserEntity> {
+    AccountEntity getUserByPhone(String phone);
 }
