@@ -3,6 +3,8 @@ package com.soft2242.one.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
  * @author ysh
  * @since 2023-05-25
  */
+@Data
 @TableName("t_visitor")
 public class Visitor implements Serializable {
 

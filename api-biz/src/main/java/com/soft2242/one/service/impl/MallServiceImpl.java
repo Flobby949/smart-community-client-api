@@ -1,7 +1,7 @@
 package com.soft2242.one.service.impl;
 
 import com.soft2242.one.entity.Mall;
-import com.soft2242.one.mapper.MallMapper;
+import com.soft2242.one.dao.MallMapper;
 import com.soft2242.one.service.IMallService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
