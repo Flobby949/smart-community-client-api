@@ -2,10 +2,8 @@ package com.soft2242.one.convert;
 
 import com.soft2242.one.entity.Bill;
 import com.soft2242.one.vo.BillVO;
-import jdk.swing.interop.LightweightContentWrapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-
 import java.util.List;
 
 /**

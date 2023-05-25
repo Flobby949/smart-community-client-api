@@ -2,20 +2,16 @@ package com.soft2242.one.controller;
 
 import com.soft2242.one.common.utils.PageResult;
 import com.soft2242.one.common.utils.Result;
-import com.soft2242.one.convert.ActivityConvert;
 import com.soft2242.one.convert.ActivityTypeConvert;
 import com.soft2242.one.entity.ActivityType;
 import com.soft2242.one.query.ActivityTypeQuery;
 import com.soft2242.one.service.ActivityTypeService;
 import com.soft2242.one.vo.ActivityTypeVO;
-import com.soft2242.one.vo.ActivityVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
-
 import jakarta.validation.Valid;
 
 
@@ -79,7 +75,6 @@ public class ActivityTypeController {
 
         return Result.ok();
     }
-
 
 //    @DeleteMapping
 //    @Operation(summary = "删除")
