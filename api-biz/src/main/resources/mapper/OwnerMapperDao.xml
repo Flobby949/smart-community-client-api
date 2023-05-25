@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft2242.one.dao.OwnerDao">
+    <select id="findMyHouseById" resultType="com.soft2242.one.vo.MyHouseListVo">
+        SELECT CONCAT(b.community_name,b.building_name,b.house_number) as name ,a.house_id FROM t_owner a,t_house b where a.user_id=#{userId} and a.identity=0 and a.state=1 and a.deleted=0 and a.house_id=b.id
+    </select>
+</mapper>
