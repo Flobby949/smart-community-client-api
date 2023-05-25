@@ -76,7 +76,16 @@ public class SecurityConfig {
                 // 要把 token 过滤器配置在 usernamePassword 过滤器的前面，就可以支持 token 认证了
                 .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 // STATELESS 无状态：前后端分离开发配置
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeHttpRequests(auth -> auth.requestMatchers(permits).permitAll().requestMatchers(HttpMethod.OPTIONS).permitAll().anyRequest().authenticated()).exceptionHandling().authenticationEntryPoint(new SecurityAuthenticationEntryPoint()).and().headers().frameOptions().disable().and().csrf(AbstractHttpConfigurer::disable);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().authorizeHttpRequests(auth -> auth
+                        .requestMatchers(permits).permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling().authenticationEntryPoint(new SecurityAuthenticationEntryPoint())
+                .and().headers().frameOptions().disable()
+                .and().csrf(AbstractHttpConfigurer::disable)
+        ;
 
         return http.build();
     }
