@@ -43,4 +43,13 @@ public interface AuthService {
      * @return boolean
      */
     boolean forgetPassword(String mobile, String password, String code);
+
+    /**
+     * 手机号登录
+     *
+     * @param mobile 手机号
+     * @param code   验证码
+     * @return SysTokenVO
+     */
+    SysTokenVO loginByPhone(String mobile, String code);
 }

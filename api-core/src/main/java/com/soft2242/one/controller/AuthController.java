@@ -54,4 +54,11 @@ public class AuthController {
         }
         return Result.ok();
     }
+
+    @PostMapping("phone/login")
+    @Operation(summary = "手机号登录")
+    public Result<SysTokenVO> phoneLogin(String mobile, String code) {
+        SysTokenVO token = authService.loginByPhone(mobile, code);
+        return Result.ok(token);
+    }
 }

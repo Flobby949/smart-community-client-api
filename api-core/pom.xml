@@ -47,6 +47,12 @@
             <artifactId>sms-plugin</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.soft2242.one</groupId>
+            <artifactId>api-base</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>

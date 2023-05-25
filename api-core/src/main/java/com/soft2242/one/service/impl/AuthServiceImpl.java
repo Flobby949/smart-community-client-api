@@ -8,6 +8,7 @@ import com.soft2242.one.common.exception.ServerException;
 import com.soft2242.one.dao.AccountDao;
 import com.soft2242.one.entity.AccountEntity;
 import com.soft2242.one.security.cache.TokenStoreCache;
+import com.soft2242.one.security.mobile.MobileAuthenticationToken;
 import com.soft2242.one.security.user.UserDetail;
 import com.soft2242.one.security.utils.TokenUtils;
 import com.soft2242.one.service.AuthService;
@@ -86,7 +87,7 @@ public class AuthServiceImpl implements AuthService {
         map.put("code", code);
         if (type == 0) {
             redisCache.set(Constant.FORGET_PASSWORD + mobile, code, 60 * 5);
-        } else if (type == 0) {
+        } else if (type == 1) {
             redisCache.set(Constant.MOBILE_LOGIN + mobile, code, 60 * 5);
         }
         boolean send = smsService.send(mobile, map);
@@ -107,6 +108,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean forgetPassword(String mobile, String password, String code) {
         String redisCode = (String) redisCache.get(Constant.FORGET_PASSWORD + mobile);
+        System.out.println("redisCode" + redisCode);
         if (ObjectUtil.isEmpty(redisCode)) {
             throw new ServerException("验证码已过期");
         }
@@ -124,5 +126,30 @@ public class AuthServiceImpl implements AuthService {
         }
         return false;
     }
-    // {bcrypt}$2a$10$SX4wjbgJlrLNjOeUb2e92e/93Mt6LZqvvGl5HPYZpHnkh9ogTNEwq
+
+    /**
+     * 手机号登录
+     *
+     * @param mobile 手机号
+     * @param code   验证码
+     * @return SysTokenVO
+     */
+    @Override
+    public SysTokenVO loginByPhone(String mobile, String code) {
+        Authentication authentication;
+        try {
+            // 用户认证
+            authentication = authenticationManager.authenticate(
+                    new MobileAuthenticationToken(mobile, code));
+        } catch (BadCredentialsException e) {
+            throw new ServerException("手机号或验证码错误");
+        }
+        // 用户信息
+        UserDetail user = (UserDetail) authentication.getPrincipal();
+        // 生成 accessToken
+        String accessToken = TokenUtils.generator();
+        // 保存用户信息到缓存，accessToken默认过期时间为24小时
+        tokenStoreCache.saveUser(accessToken, user);
+        return new SysTokenVO(accessToken);
+    }
 }

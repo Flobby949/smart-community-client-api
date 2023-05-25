@@ -2,6 +2,8 @@ package com.soft2242.one.api;
 
 
 import com.soft2242.one.cache.SmsSendCache;
+import com.soft2242.one.common.cache.RedisCache;
+import com.soft2242.one.common.constant.Constant;
 import com.soft2242.one.service.SmsService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,7 @@ import java.util.Map;
 public class SmsApiImpl implements SmsApi {
     private final SmsService smsService;
     private final SmsSendCache smsSendCache;
+    private final RedisCache redisCache;
 
     @Override
     public boolean sendCode(String mobile, String key, String value) {
@@ -32,13 +35,14 @@ public class SmsApiImpl implements SmsApi {
 
     @Override
     public boolean verifyCode(String mobile, String code) {
-        String value = smsSendCache.getCode(mobile);
-        if (value != null) {
-            // 删除短信验证码
-            smsSendCache.deleteCode(mobile);
-            // 校验
-            return value.equalsIgnoreCase(code);
+        String s = (String) redisCache.get(Constant.MOBILE_LOGIN + mobile);
+        if (s == null) {
+            return false;
         }
-        return false;
+        if (!s.equals(code)) {
+            return false;
+        }
+        return true;
+
     }
 }
