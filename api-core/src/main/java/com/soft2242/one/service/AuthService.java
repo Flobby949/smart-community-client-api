@@ -1,7 +1,6 @@
 package com.soft2242.one.service;
 
-import com.soft2242.one.vo.SysTokenVO;
-import com.soft2242.one.vo.AccountLoginVO;
+import com.soft2242.one.vo.*;
 
 /**
  * @author : Flobby
@@ -32,7 +31,7 @@ public interface AuthService {
      * @param mobile 手机号
      * @return boolean
      */
-    boolean sendCode(String mobile,Integer type);
+    boolean sendCode(SendPhoneVo sendPhoneVo);
 
     /**
      * 忘记密码
@@ -42,7 +41,7 @@ public interface AuthService {
      * @param code     验证码
      * @return boolean
      */
-    boolean forgetPassword(String mobile, String password, String code);
+    boolean forgetPassword(ForgetVo forgetVo);
 
     /**
      * 手机号登录
@@ -51,5 +50,5 @@ public interface AuthService {
      * @param code   验证码
      * @return SysTokenVO
      */
-    SysTokenVO loginByPhone(String mobile, String code);
+    SysTokenVO loginByPhone(PhoneLoginVo phoneLoginVo);
 }
