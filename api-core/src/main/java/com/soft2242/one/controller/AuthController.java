@@ -2,11 +2,14 @@ package com.soft2242.one.controller;
 
 import com.soft2242.one.common.utils.Result;
 import com.soft2242.one.service.AuthService;
+import com.soft2242.one.service.service.AliyunStorageService;
+import com.soft2242.one.service.service.StorageService;
 import com.soft2242.one.vo.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author : Flobby
@@ -21,6 +24,9 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class AuthController {
     private final AuthService authService;
+    private final StorageService storageService;
+
+    private final AliyunStorageService aliyunStorageService;
 
     @PostMapping("login")
     @Operation(summary = "账号密码登录")
@@ -56,5 +62,15 @@ public class AuthController {
     public Result<SysTokenVO> phoneLogin(@RequestBody PhoneLoginVo phoneLoginVo) {
         SysTokenVO token = authService.loginByPhone(phoneLoginVo);
         return Result.ok(token);
+    }
+    @PostMapping("/upload")
+    @Operation(summary = "文件上传")
+    public Result<String> upload(@RequestParam("file") MultipartFile file) throws Exception {
+        if (file.isEmpty()) {
+            return Result.error("请选择需要上传的文件");
+        }
+        String url = aliyunStorageService.upload(file.getBytes(), file.getOriginalFilename());
+
+        return Result.ok(url);
     }
 }

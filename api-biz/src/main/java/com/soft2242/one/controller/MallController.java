@@ -26,10 +26,12 @@ import org.springframework.web.bind.annotation.*;
  * @since 2023-05-25
  */
 
+
 @RestController
 @Tag(name = "商铺")
 @RequestMapping("soft2242/mall")
 @AllArgsConstructor
+
 public class MallController {
     private final IMallService MallService;
 
