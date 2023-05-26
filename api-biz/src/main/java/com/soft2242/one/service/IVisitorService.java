@@ -12,22 +12,10 @@ import com.soft2242.one.vo.VisitorVO;
 /**
  * <p>
  * 服务类
-=======
->>>>>>> origin/test
-import com.soft2242.one.entity.Visitor;
-import com.soft2242.one.mybatis.service.BaseService;
-import com.soft2242.one.query.VisitorQuery;
-import com.soft2242.one.vo.VisitorVO;
 
 /**
  * <p>
-<<<<<<< HEAD
- * 服务类
 
-=======
- *  服务类
->>>>>>> origin/test
->>>>>>> origin/test
  * </p>
  *
  * @author ysh
