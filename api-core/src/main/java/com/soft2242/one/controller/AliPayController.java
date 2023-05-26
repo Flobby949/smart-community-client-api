@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 // 9428521.24 - 30 = 9428491.24 + 30 = 9428521.24
 @RestController
 @RequestMapping("/alipay")
-@Tag(name = "AliPayController", description = "支付宝支付")
+@Tag(name = "支付宝支付", description = "支付宝支付")
 @Slf4j
 public class AliPayController {
     @Resource

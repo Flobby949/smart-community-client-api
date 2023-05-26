@@ -11,3 +11,4 @@ auth:
     - /
     - /upload/**
     - /alipay/**
+    - /oauth/**
