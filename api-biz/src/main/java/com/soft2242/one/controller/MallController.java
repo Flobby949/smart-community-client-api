@@ -1,6 +1,6 @@
 package com.soft2242.one.controller;
 
-<<<<<<< HEAD
+
 import com.soft2242.one.common.utils.PageResult;
 import com.soft2242.one.common.utils.Result;
 import com.soft2242.one.convert.MallConvert;
@@ -15,10 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
-=======
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.stereotype.Controller;
->>>>>>> origin/test
+
 
 /**
  * <p>
@@ -28,7 +25,7 @@ import org.springframework.stereotype.Controller;
  * @author ysh
  * @since 2023-05-25
  */
-<<<<<<< HEAD
+
 @RestController
 @Tag(name = "商铺")
 @RequestMapping("soft2242/mall")
@@ -57,10 +54,6 @@ public class MallController {
         return Result.ok();
     }
 
-=======
-@Controller
-@RequestMapping("/mall")
-public class MallController {
->>>>>>> origin/test
+
 
 }
