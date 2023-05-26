@@ -13,6 +13,9 @@
     FROM t_user
     </select>
     <select id="findFamily" parameterType="long" resultMap="MyFamilyResult">
-        SELECT real_name,phone,identity from t_owner where house_id=#{houseId} and state=1 and identity!=0
+        SELECT id,real_name,phone,identity from t_owner where house_id=#{houseId} and state=1 and identity!=0
     </select>
+    <delete id="deleteFamily" parameterType="int">
+        delete t_owner where id=#{ownerId} and id in(select id from t_owner where user_id=#{userId})
+    </delete>
 </mapper>
