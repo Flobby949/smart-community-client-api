@@ -65,7 +65,8 @@ public class ActivityController {
 
 //    逻辑删除
 @PutMapping("delete/{id}")
-@Operation(summary = "修改")
+@Operation(summary = "删除")
+
 //    @PreAuthorize("hasAuthority('soft2242:activity:update')")
 public Result<String> delete(@PathVariable("id")Long id){
     Activity entity = activityService.getById(id);

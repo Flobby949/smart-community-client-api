@@ -36,7 +36,9 @@ public class VisitorInvitation implements Serializable {
     /**
      * 绑定业主id
      */
-    private Integer ownerId;
+
+    private Integer userId;
+
 
     /**
      * 门禁表主键，关联访客允许访问入口，用”,” 分割（1，2，3，4）
@@ -93,11 +95,13 @@ public class VisitorInvitation implements Serializable {
         this.visitorId = visitorId;
     }
     public Integer getOwnerId() {
-        return ownerId;
+
+        return userId;
     }
 
-    public void setOwnerId(Integer ownerId) {
-        this.ownerId = ownerId;
+    public void setOwnerId(Integer userId) {
+        this.userId = userId;
+
     }
     public String getDoorIds() {
         return doorIds;
@@ -161,7 +165,7 @@ public class VisitorInvitation implements Serializable {
         return "VisitorInvitation{" +
             "id=" + id +
             ", visitorId=" + visitorId +
-            ", ownerId=" + ownerId +
+            ", userId=" + userId +
             ", doorIds=" + doorIds +
             ", endTime=" + endTime +
             ", status=" + status +
