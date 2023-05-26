@@ -14,6 +14,7 @@
     <modules>
         <module>sms-plugin</module>
         <module>file-plugin</module>
+        <module>pay-plugin</module>
     </modules>
 
 

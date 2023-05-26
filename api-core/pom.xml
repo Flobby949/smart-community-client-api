@@ -58,6 +58,13 @@
             <artifactId>file-plugin</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.soft2242.one</groupId>
+            <artifactId>pay-plugin</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+
     </dependencies>
 
 </project>
