@@ -54,3 +54,9 @@ alipay:
   alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmydAaVLYbtvWKdaZhN0zDAi8sym6nfCwO18hQfZZOtwIFoR90+CkxNCOtoLOPC3+ksB6wwoqzhn33v4cTkzmHJjhlN9MFVhCYWIw4z0RkjvE1snlMi8F+lynPIv9kRUDnv5N9tabagfmouuhJZ1Ly145yT+2MBOy20Jueaqj01xFak+kzgjqK4K/8Cid4kfLCj7t8btiOFWexfXy5ZLJHOsOvaiyrwkI7+pDe9eKiEwZQ7ixqwO6PSQsVf1swOjZMi30Lj8RcfsfrH9XAx7X2t1Qj945QEcCnT725gBqEJUmUb9bCpD9ioSas/USNqFMgS/iJ8n0gnAK1N8vueSykQIDAQAB
   notifyUrl: http://muaqx9.natappfree.cc/alipay/notify
   returnUrl: http://localhost:8080/orders
+
+wx:
+  open:
+    appId: wxd898fcb01713c658
+    appSecret: 0b1e8e1b040b4e8c2e2b2e1a905c1d1c
+    redirectUrl: http://muaqx9.natappfree.cc/sell/wechat/authorize

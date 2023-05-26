@@ -28,6 +28,7 @@ public class AuthController {
 
     private final AliyunStorageService aliyunStorageService;
 
+
     @PostMapping("login")
     @Operation(summary = "账号密码登录")
     public Result<SysTokenVO> login(@RequestBody AccountLoginVO login) {
@@ -63,6 +64,7 @@ public class AuthController {
         SysTokenVO token = authService.loginByPhone(phoneLoginVo);
         return Result.ok(token);
     }
+
     @PostMapping("/upload")
     @Operation(summary = "文件上传")
     public Result<String> upload(@RequestParam("file") MultipartFile file) throws Exception {
@@ -70,7 +72,6 @@ public class AuthController {
             return Result.error("请选择需要上传的文件");
         }
         String url = aliyunStorageService.upload(file.getBytes(), file.getOriginalFilename());
-
         return Result.ok(url);
     }
 }
