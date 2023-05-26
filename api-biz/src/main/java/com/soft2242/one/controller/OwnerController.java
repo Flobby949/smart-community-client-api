@@ -2,9 +2,7 @@ package com.soft2242.one.controller;
 
 import com.soft2242.one.common.utils.Result;
 import com.soft2242.one.security.user.SecurityUser;
-import com.soft2242.one.security.user.UserDetail;
 import com.soft2242.one.service.OwnerService;
-import com.soft2242.one.vo.MyFamilyVo;
 import com.soft2242.one.vo.MyHouseListVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,10 +31,10 @@ public class OwnerController {
         List<MyHouseListVo> list = ownerService.findMyHouseById(SecurityUser.getUser().getId());
         return Result.ok(list);
     }
-    @PostMapping("findFamily")
-    @Operation(summary ="获取家庭成员信息")
-    private Result<List<MyFamilyVo>> findFamily(Long houseId){
-        List<MyFamilyVo> list = ownerService.findFamily(houseId);
-        return Result.ok(list);
-    }
+//    @PostMapping("findFamily")
+//    @Operation(summary ="获取家庭成员信息")
+//    private Result<List<MyFamilyVo>> findFamily(Long houseId){
+//        List<MyFamilyVo> list = ownerService.findFamily(houseId);
+//        return Result.ok(list);
+//    }
 }
