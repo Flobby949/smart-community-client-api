@@ -1,8 +1,10 @@
 package com.soft2242.one.convert;
 
 import com.soft2242.one.entity.Visitor;
+
 import com.soft2242.one.vo.VisitorVO;
 import org.mapstruct.Mapper;
+
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.List;
  * Date: 2023/5/25 14:51
  * Describe:
  */
+
 @Mapper
 
 public interface VisitorConvert {
@@ -21,7 +24,6 @@ public interface VisitorConvert {
     VisitorVO convert(Visitor entity);
 
     List<VisitorVO> convertList(List<Visitor> list);
-
 
 
 }

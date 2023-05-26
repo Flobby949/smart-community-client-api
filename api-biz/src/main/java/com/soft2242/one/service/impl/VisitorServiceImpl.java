@@ -1,5 +1,6 @@
 package com.soft2242.one.service.impl;
 
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -11,17 +12,23 @@ import com.soft2242.one.mybatis.service.impl.BaseServiceImpl;
 import com.soft2242.one.query.VisitorQuery;
 import com.soft2242.one.service.IVisitorService;
 import com.soft2242.one.vo.VisitorVO;
+
 import org.springframework.stereotype.Service;
 
 /**
  * <p>
+<<<<<<< HEAD
  * 服务实现类
+=======
+ *  服务实现类
+>>>>>>> origin/test
  * </p>
  *
  * @author ysh
  * @since 2023-05-25
  */
 @Service
+
 public class VisitorServiceImpl extends BaseServiceImpl<VisitorMapper, Visitor> implements IVisitorService {
 
     private LambdaQueryWrapper<Visitor> getWrapper(VisitorQuery query) {
@@ -44,5 +51,6 @@ public class VisitorServiceImpl extends BaseServiceImpl<VisitorMapper, Visitor> 
     public void update(VisitorVO vo) {
         updateById(VisitorConvert.INSTANCE.convert(vo));
     }
+
 
 }

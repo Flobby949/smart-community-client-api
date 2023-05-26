@@ -11,17 +11,23 @@ import com.soft2242.one.mybatis.service.impl.BaseServiceImpl;
 import com.soft2242.one.query.OrderQuery;
 import com.soft2242.one.service.IOrderService;
 import com.soft2242.one.vo.OrderVO;
+
 import org.springframework.stereotype.Service;
 
 /**
  * <p>
+<<<<<<< HEAD
  * 服务实现类
+=======
+ *  服务实现类
+>>>>>>> origin/test
  * </p>
  *
  * @author ysh
  * @since 2023-05-25
  */
 @Service
+
 public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implements IOrderService {
 
     private LambdaQueryWrapper<Order> getWrapper(OrderQuery query) {
@@ -44,4 +50,5 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
     public void update(OrderVO vo) {
         updateById(OrderConvert.INSTANCE.convert(vo));
     }
+
 }

@@ -1,13 +1,16 @@
 package com.soft2242.one.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
+
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @Schema(description = "访客邀请")
+
 public class VisitorInvitationVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -25,6 +28,7 @@ public class VisitorInvitationVO implements Serializable {
      */
     @Schema(description = "绑定业主id")
     private Integer userId;
+
 
     /**
      * 门禁表主键，关联访客允许访问入口，用”,” 分割（1，2，3，4）
@@ -73,6 +77,8 @@ public class VisitorInvitationVO implements Serializable {
      */
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
+
+
 
 
 

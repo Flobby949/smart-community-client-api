@@ -23,10 +23,4 @@ public class AccountLoginVO implements Serializable {
     @Schema(description = "密码")
     private String password;
 
-    @Schema(description = "唯一key")
-    private String key;
-
-    @Schema(description = "验证码")
-    private String captcha;
-
 }

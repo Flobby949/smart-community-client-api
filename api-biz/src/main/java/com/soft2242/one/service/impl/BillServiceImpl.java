@@ -52,6 +52,7 @@ public class BillServiceImpl extends BaseServiceImpl<BillMapper, Bill> implement
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+
     public void delete(List<Long> idList) {
         removeByIds(idList);
     }

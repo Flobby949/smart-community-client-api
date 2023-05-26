@@ -1,5 +1,6 @@
 package com.soft2242.one.service.impl;
 
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -18,12 +19,24 @@ import java.util.List;
 /**
  * <p>
  * 服务实现类
+=======
+import com.soft2242.one.entity.VisitorInvitation;
+import com.soft2242.one.dao.VisitorInvitationMapper;
+import com.soft2242.one.service.IVisitorInvitationService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
+
+/**
+ * <p>
+ *  服务实现类
+>>>>>>> origin/test
  * </p>
  *
  * @author ysh
  * @since 2023-05-25
  */
 @Service
+
 public class VisitorInvitationServiceImpl extends BaseServiceImpl<VisitorInvitationMapper, VisitorInvitation> implements IVisitorInvitationService {
 
     private LambdaQueryWrapper<VisitorInvitation> getWrapper(VisitorInvitationQuery query) {
@@ -62,4 +75,5 @@ public class VisitorInvitationServiceImpl extends BaseServiceImpl<VisitorInvitat
     public void update(VisitorInvitationVO vo) {
         updateById(VisitorInvitationConvert.INSTANCE.convert(vo));
     }
+
 }

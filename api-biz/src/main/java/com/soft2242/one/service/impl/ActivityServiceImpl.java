@@ -31,6 +31,7 @@ public class ActivityServiceImpl extends BaseServiceImpl<ActivityDao, Activity> 
     @Override
     public PageResult<ActivityVO> page(ActivityQuery query) {
         IPage<Activity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
+
         return new PageResult<>(ActivityConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
     }
 

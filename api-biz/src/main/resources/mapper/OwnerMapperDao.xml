@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft2242.one.dao.OwnerDao">
+    <resultMap id="MyFamilyResult" type="com.soft2242.one.vo.MyFamilyVo">
+        <id property="phone" column="phone" />
+        <association property="isRegister" column="phone" javaType="string" select="selectUserByPhone" />
+    </resultMap>
+    <select id="findMyHouseById" resultType="com.soft2242.one.vo.MyHouseListVo">
+        SELECT CONCAT(b.community_name,b.building_name,b.house_number) as name ,a.house_id FROM t_owner a,t_house b where a.user_id=#{userId} and a.identity=0 and a.state=1 and a.deleted=0 and a.house_id=b.id
+    </select>
+    <select id="selectUserByPhone" parameterType="string" resultType="string">
+        SELECT COALESCE((SELECT '已注册' FROM t_user WHERE phone = #{phone}), '未注册') AS isRegister
+    FROM t_user
+    </select>
+    <select id="findFamily" parameterType="long" resultMap="MyFamilyResult">
+        SELECT real_name,phone,identity from t_owner where house_id=#{houseId} and state=1 and identity!=0
+    </select>
+</mapper>

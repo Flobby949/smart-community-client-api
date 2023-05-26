@@ -11,6 +11,7 @@ import com.soft2242.one.mybatis.service.impl.BaseServiceImpl;
 import com.soft2242.one.query.MallQuery;
 import com.soft2242.one.service.IMallService;
 import com.soft2242.one.vo.MallVO;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
  * @since 2023-05-25
  */
 @Service
+
 public class MallServiceImpl extends BaseServiceImpl<MallMapper, Mall> implements IMallService {
 
     private LambdaQueryWrapper<Mall> getWrapper(MallQuery query) {
@@ -45,4 +47,5 @@ public class MallServiceImpl extends BaseServiceImpl<MallMapper, Mall> implement
     public void update(MallVO vo) {
         updateById(MallConvert.INSTANCE.convert(vo));
     }
+
 }

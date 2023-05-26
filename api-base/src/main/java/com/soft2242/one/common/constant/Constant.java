@@ -46,4 +46,14 @@ public interface Constant {
     String MYSQL_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     String DEFAULT_PASSWORD = "123456";
+
+    /**
+     * 忘记密码
+     */
+    String FORGET_PASSWORD="forgetPassword";
+
+    /**
+     * 手机号登录
+     */
+    String MOBILE_LOGIN="mobileLogin";
 }

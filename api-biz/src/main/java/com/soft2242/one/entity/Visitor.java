@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author ysh
@@ -66,7 +66,9 @@ public class Visitor implements Serializable {
     /**
      * 创建时间
      */
+
     private LocalDateTime createTime;
+
 
     /**
      * 创建者
@@ -81,6 +83,7 @@ public class Visitor implements Serializable {
     /**
      * 更新时间
      */
+
     private LocalDateTime updateTime;
 
     public Integer getId() {
@@ -140,11 +143,13 @@ public class Visitor implements Serializable {
         this.deleted = deleted;
     }
     public LocalDateTime getCreateTime1() {
+
         return createTime;
     }
 
     public void setCreateTime1(LocalDateTime createTime1) {
         this.createTime = createTime1;
+
     }
     public Long getCreator() {
         return creator;
@@ -161,11 +166,13 @@ public class Visitor implements Serializable {
         this.updater = updater;
     }
     public LocalDateTime getUpdateTime1() {
+
         return updateTime;
     }
 
     public void setUpdateTime1(LocalDateTime updateTime1) {
         this.updateTime = updateTime1;
+
     }
 
     @Override

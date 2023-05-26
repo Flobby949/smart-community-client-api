@@ -7,10 +7,12 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
+
 @Schema(description = "访客开门登记")
 public class VisitorVO implements Serializable {
     private static final long serialVersionUID = 1L;
     @Schema(description = "id")
+
     private Integer id;
 
     /**
@@ -59,7 +61,9 @@ public class VisitorVO implements Serializable {
      * 创建时间
      */
     @Schema(description = "创建时间")
+
     private LocalDateTime createTime;
+
 
     /**
      * 创建者
@@ -78,6 +82,7 @@ public class VisitorVO implements Serializable {
      */
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
+
 
 
 }

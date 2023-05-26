@@ -1,5 +1,6 @@
 package com.soft2242.one.controller;
 
+
 import com.soft2242.one.common.utils.PageResult;
 import com.soft2242.one.common.utils.Result;
 import com.soft2242.one.convert.VisitorConvert;
@@ -22,11 +23,20 @@ import java.util.List;
 /**
  * <p>
  * 前端控制器
+=======
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.stereotype.Controller;
+
+/**
+ * <p>
+ *  前端控制器
+>>>>>>> origin/test
  * </p>
  *
  * @author ysh
  * @since 2023-05-25
  */
+
 @RestController
 @Tag(name = "访客邀请")
 @RequestMapping("soft2242/visitor")
