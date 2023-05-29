@@ -18,5 +18,5 @@ import java.util.List;
 public interface OwnerDao extends BaseDao<OwnerEntity> {
     List<MyHouseListVo> findMyHouseById(Long userId);
     List<MyFamilyVo> findFamily(Long houseId);
-    int deleteFamily(@Param("OwnerId") Long ownerId,@Param("userId") Long userId);
+    int deleteFamily(@Param("id") Long id,@Param("userId") Long userId);
 }

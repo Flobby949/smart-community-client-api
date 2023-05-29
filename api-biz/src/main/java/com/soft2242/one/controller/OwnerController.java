@@ -1,5 +1,6 @@
 package com.soft2242.one.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.soft2242.one.common.utils.Result;
 import com.soft2242.one.entity.OwnerEntity;
 import com.soft2242.one.security.user.SecurityUser;
@@ -42,18 +43,27 @@ public class OwnerController {
     }
     @DeleteMapping("deleteFamily")
     @Operation(summary = "删除家庭成员信息")
-    private Result<String> deleteFamily(Long ownerId){
-        if(ownerService.deleteFamily(ownerId,SecurityUser.getUser().getId()))
+    private Result<String> deleteFamily(Long id){
+        if(ownerService.deleteFamily(id,SecurityUser.getUser().getId()))
             return Result.ok();
         else
-            return Result.error("删除失败");
+            return Result.error(0,"删除失败");
     }
     @PostMapping("addFamily")
     @Operation(summary = "绑定家庭成员信息")
     private Result<String> addFamily(OwnerEntity owner){
-        if(ownerService.save(owner))
-            return Result.ok();
-        else
-            return Result.error("绑定失败");
+        QueryWrapper<OwnerEntity> wrapper = new QueryWrapper<>();
+        wrapper.lambda().select(OwnerEntity::getId).eq(OwnerEntity::getHouseId,owner.getHouseId()).eq(OwnerEntity::getUserId,SecurityUser.getUser().getId())
+                .eq(OwnerEntity::getState,1).eq(OwnerEntity::getIdentity,0).eq(OwnerEntity::getDeleted,0);
+        OwnerEntity one = ownerService.getOne(wrapper);
+        if(one.getId()!=null){
+            owner.setOwnerId(one.getId());
+            owner.setState(1);
+            if(ownerService.save(owner))
+                return Result.ok();
+            else
+                return Result.error(0,"绑定失败");
+        }
+        return Result.error(0,"绑定失败");
     }
 }
