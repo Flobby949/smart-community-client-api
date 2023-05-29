@@ -21,6 +21,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -47,9 +49,20 @@ public class SecurityConfig {
     private final MobileUserDetailsService mobileUserDetailsService;
     private final MobileVerifyCodeService mobileVerifyCodeService;
 
+
     @Bean
     MobileAuthenticationProvider mobileAuthenticationProvider() {
         return new MobileAuthenticationProvider(mobileUserDetailsService, mobileVerifyCodeService);
+    }
+
+    @Bean
+    ClientRegistrationRepository clientRegistrationRepository() {
+        return new ClientRegistrationRepository() {
+            @Override
+            public ClientRegistration findByRegistrationId(String registrationId) {
+                return null;
+            }
+        };
     }
 
 
@@ -82,8 +95,9 @@ public class SecurityConfig {
         // 忽略授权的地址列表
         List<String> permitList = permitResource.getPermitList();
         String[] permits = permitList.toArray(new String[0]);
-
         http
+                // 开启第三方登录
+                .oauth2Login().and()
                 // 要把 token 过滤器配置在 usernamePassword 过滤器的前面，就可以支持 token 认证了
                 .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 // STATELESS 无状态：前后端分离开发配置
@@ -93,6 +107,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyRequest().authenticated()
                 )
+
                 .exceptionHandling().authenticationEntryPoint(new SecurityAuthenticationEntryPoint())
                 .and().headers().frameOptions().disable()
                 .and().csrf(AbstractHttpConfigurer::disable)
