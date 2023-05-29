@@ -6,16 +6,15 @@
         <association property="isRegister" column="phone" javaType="string" select="selectUserByPhone" />
     </resultMap>
     <select id="findMyHouseById" resultType="com.soft2242.one.vo.MyHouseListVo">
-        SELECT CONCAT(b.community_name,b.building_name,b.house_number) as name ,a.house_id FROM t_owner a,t_house b where a.user_id=#{userId} and a.identity=0 and a.state=1 and a.deleted=0 and a.house_id=b.id
+        SELECT CONCAT(b.community_name,b.building_name,b.units,'单元',b.house_number) as name ,a.house_id FROM t_owner a,t_house b where a.user_id=#{userId} and a.identity=0 and a.state=1 and a.deleted=0 and a.house_id=b.id
     </select>
     <select id="selectUserByPhone" parameterType="string" resultType="string">
         SELECT COALESCE((SELECT '已注册' FROM t_user WHERE phone = #{phone}), '未注册') AS isRegister
-    FROM t_user
     </select>
     <select id="findFamily" parameterType="long" resultMap="MyFamilyResult">
-        SELECT id,real_name,phone,identity from t_owner where house_id=#{houseId} and state=1 and identity!=0
+        SELECT id,real_name,phone,identity from t_owner where house_id=#{houseId} and state=1 and identity!=0 and deleted=0
     </select>
-    <delete id="deleteFamily" parameterType="int">
-        delete t_owner where id=#{ownerId} and id in(select id from t_owner where user_id=#{userId})
-    </delete>
+    <update id="deleteFamily" >
+        update t_owner set deleted=1 , update_time=now()  where id=#{id}  and owner_id in(SELECT id from(select id from t_owner where user_id=#{userId} and identity=0 and state=1 and deleted=0)a )
+    </update>
 </mapper>

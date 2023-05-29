@@ -28,7 +28,7 @@ public class OwnerServiceImpl extends BaseServiceImpl<OwnerDao, OwnerEntity> imp
     }
 
     @Override
-    public boolean deleteFamily(Long ownerId, Long userId) {
-        return baseMapper.deleteFamily(ownerId, userId)>0;
+    public boolean deleteFamily(Long id, Long userId) {
+        return baseMapper.deleteFamily(id, userId)>0;
     }
 }

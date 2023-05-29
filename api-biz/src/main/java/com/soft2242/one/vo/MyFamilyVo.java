@@ -12,6 +12,10 @@ import lombok.Data;
 @Schema(description = "家庭成员信息")
 public class MyFamilyVo {
     /**
+     * id
+     */
+    private Long id;
+    /**
      * 姓名
      */
     private String realName;
