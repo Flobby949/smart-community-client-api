@@ -37,8 +37,4 @@ public class PassRecordEntity extends BaseEntity {
 	private Long communityId;
 
 
-
-
-
-
 }

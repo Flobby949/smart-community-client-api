@@ -15,5 +15,5 @@ public interface SmartService {
 
     List<DoorListItemVO> getDoorList(Long communityId);
 
-    void openDoor(Long doorId, Long userId);
+    void openDoor(Long doorId, Long userId, Integer passWay);
 }

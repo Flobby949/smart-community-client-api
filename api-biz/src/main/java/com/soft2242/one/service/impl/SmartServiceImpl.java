@@ -4,13 +4,13 @@ import com.soft2242.one.common.exception.ServerException;
 import com.soft2242.one.dao.DoorDao;
 import com.soft2242.one.dao.PassRecordDao;
 import com.soft2242.one.dao.PassReviewDao;
+import com.soft2242.one.entity.PassRecordEntity;
 import com.soft2242.one.service.SmartService;
 import com.soft2242.one.vo.DoorListItemVO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author : Flobby
@@ -32,10 +32,19 @@ public class SmartServiceImpl implements SmartService {
     }
 
     @Override
-    public void openDoor(Long doorId, Long userId) {
+    public void openDoor(Long doorId, Long userId, Integer passWay) {
         Integer passReview = passReviewDao.getOwnerPassReview(userId, doorId);
         if (passReview == 0) {
             throw new ServerException("该小区门禁审核未通过！");
+        }
+        PassRecordEntity record = new PassRecordEntity();
+        record.setUserId(userId);
+        record.setDoorId(doorId);
+        record.setPassWay(passWay);
+        record.setCommunityId(doorDao.selectById(doorId).getCommunityId());
+        int insert = passRecordDao.insert(record);
+        if (insert == 0) {
+            throw new ServerException("开锁失败！");
         }
     }
 }
