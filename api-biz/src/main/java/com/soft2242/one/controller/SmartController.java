@@ -36,7 +36,7 @@ public class SmartController {
 
     @PostMapping("openDoor")
     @Operation(summary = "开门")
-    public Result<List<DoorListItemVO>> openDoor(@RequestParam Long doorId, @RequestParam Integer passWay) {
+    public Result<String> openDoor(@RequestParam Long doorId, @RequestParam Integer passWay) {
         smartService.openDoor(doorId, SecurityUser.getUserId(), passWay);
         return Result.ok();
     }
