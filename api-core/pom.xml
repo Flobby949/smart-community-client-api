@@ -17,7 +17,7 @@
         <dependency>
             <groupId>com.soft2242.one</groupId>
             <artifactId>api-base</artifactId>
-            <version>${reversion}</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>
@@ -39,7 +39,7 @@
         <dependency>
             <groupId>com.soft2242.one</groupId>
             <artifactId>sms-plugin</artifactId>
-            <version>${reversion}</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>

@@ -6,6 +6,7 @@
     <select id="selectDoor" resultType="com.soft2242.one.vo.DoorListItemVO" parameterType="long">
         SELECT door.id            as doorId,
                door.door_name,
+               door.door_img,
                device.status      as deviceStatus,
                device.device_name as deviceName,
                type.type          as deviceType
