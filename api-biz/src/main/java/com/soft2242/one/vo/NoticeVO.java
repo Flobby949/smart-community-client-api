@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+
+
 import com.soft2242.one.common.utils.DateUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -37,10 +39,11 @@ public class NoticeVO implements Serializable {
     @Schema(description = "社区id", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "社区id不能为空")
     private Long communityId;
-
+    private String communityName;
     @Schema(description = "发布人id", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "发布人id不能为空")
+//    @NotNull(message = "发布人id不能为空")
     private Long adminId;
+    private String userName;
 
 
     @Schema(description = "通知类型(0:消杀通知 1：物业通知 2：缴费通知)", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -78,12 +81,13 @@ public class NoticeVO implements Serializable {
 
 
     @Schema(description = "审核人id", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "审核人id不能为空")
+//    @NotNull(message = "审核人id不能为空")
     private Long reviewUerId;
     @Schema(description = "审核时间")
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
     private Date reviewTime;
-
+    @Schema(description = "阅读状态(1,未读 2已读)")
+    private String status;
 
 
 

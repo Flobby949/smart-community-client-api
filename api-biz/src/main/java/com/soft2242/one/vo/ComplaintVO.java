@@ -9,38 +9,33 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
-* 报修表
+* 投诉
 *
-* @author xuelkong
+* @author xuelong
 * @since 1.0.0 2023-05-26
 */
 @Data
-@Schema(description = "报修表")
-public class RepairVO implements Serializable {
+@Schema(description = "投诉")
+public class ComplaintVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Schema(description = "自增主键")
+	@Schema(description = "id")
 	private Long id;
 
 	@Schema(description = "社区id")
-	private String communityId;
+	private Long communityId;
 	private String communityName;
-	@Schema(description = "报修人id")
+	@Schema(description = "投诉人id")
 	private Long userId;
 	private String userName;
-	@Schema(description = "报修类别(0:公共报修，1：个人报修)")
+
+	@Schema(description = "投诉类型(0:物业服务，1:社区服务)")
 	private Integer type;
 
-	@Schema(description = "报修类型(0:路灯，1：厕所)")
-	private Integer category;
-
-	@Schema(description = "报修地址")
-	private String place;
-
-	@Schema(description = "报修标题")
+	@Schema(description = "投诉标题")
 	private String title;
 
-	@Schema(description = "报修内容")
+	@Schema(description = "投诉内容")
 	private String content;
 
 	@Schema(description = "图片")
@@ -49,30 +44,41 @@ public class RepairVO implements Serializable {
 	@Schema(description = "处理状态（0：未处理，1：处理中，2：已处理，3：已评价）")
 	private Integer state;
 
-	@Schema(description = "处理人id，逗号分隔")
-	//这里存着登录用户的信息
-	private String[] employeeIds = null;
-	private String employees = null;
-	//处理人姓名
-	private String[] employeeNames;
-
 	@Schema(description = "处理结果")
 	private String result;
 
+	@Schema(description = "处理人id，逗号分隔")
+	private String[] employeeIds = null;
+	private String employees = null;
+
+	private String[] employeeNames;
 	@Schema(description = "处理时间")
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private Date handleTime;
 
-	@Schema(description = "报修评价")
+	@Schema(description = "评价内容")
 	private String evaluate;
 
-	@Schema(description = "报修评价时间")
+	@Schema(description = "评价时间")
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private Date evaluateTime;
+
+	@Schema(description = "删除标识（0：未删除 1：已删除）")
+	private Integer deleted;
 
 	@Schema(description = "创建时间")
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private Date createTime;
+
+	@Schema(description = "更新时间")
+	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+	private Date updateTime;
+
+	@Schema(description = "创建者")
+	private Long creator;
+
+	@Schema(description = "更新者")
+	private Long updater;
 
 
 }

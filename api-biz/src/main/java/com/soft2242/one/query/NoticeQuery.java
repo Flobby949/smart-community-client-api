@@ -1,9 +1,13 @@
 package com.soft2242.one.query;
 
+
 import com.soft2242.one.common.query.Query;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 
 /**
@@ -16,7 +20,14 @@ import lombok.EqualsAndHashCode;
 @Schema(description = "通知查询")
 public class NoticeQuery extends Query {
     @Schema(description = "公告id")
-    private Long noticeId;
+    private String noticeId;
+
+    @Schema(description = "阅读人id")
+    private String userId;
+
+
+    @Schema(description = "阅读状态(0全部，1:未读,2：已读 )")
+    private String status;
 
     @Schema(description = "通知标题")
     private String title;
@@ -26,9 +37,15 @@ public class NoticeQuery extends Query {
 
 
 
+
+
+
     @Schema(description = "所属小区")
-    private Long communityId;
+    private String[] communityId;
     @Schema(description = "发布人")
-    private Long adminId;
+    private String adminId;
+    @Schema(description = "创建时间")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date[] createTime;
 
 }

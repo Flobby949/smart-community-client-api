@@ -1,13 +1,15 @@
 package com.soft2242.one.service;
 
 
-import com.soft2242.one.common.utils.PageResult;
+
+
 import com.soft2242.one.entity.NoticeEntity;
 import com.soft2242.one.mybatis.service.BaseService;
 import com.soft2242.one.query.NoticeQuery;
 import com.soft2242.one.vo.NoticeVO;
 
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,7 +21,8 @@ import java.util.List;
 
 public interface NoticeService extends BaseService<NoticeEntity> {
 
-    PageResult<NoticeVO> page(NoticeQuery query);
+    HashMap<String, Object> page(NoticeQuery query);
+    List<NoticeVO> getList(NoticeQuery query);
 
 
     void save(NoticeVO vo);

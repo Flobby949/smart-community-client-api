@@ -1,5 +1,6 @@
 package com.soft2242.one.dao;
 
+
 import com.soft2242.one.entity.NoticeReaderEntity;
 import com.soft2242.one.mybatis.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;

@@ -4,6 +4,7 @@ package com.soft2242.one.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import com.soft2242.one.mybatis.entity.BaseEntity;
 import lombok.Data;
 
