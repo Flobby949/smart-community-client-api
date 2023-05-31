@@ -1,5 +1,7 @@
 package com.soft2242.one.query;
 
+
+
 import com.soft2242.one.common.query.Query;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -17,8 +19,8 @@ import lombok.EqualsAndHashCode;
 public class NoticeReaderQuery extends Query {
 
     @Schema(description = "公告id")
-    private Long noticeId;
-    @Schema(description = "发布人")
-    private Long userId;
+    private String noticeId;
+    @Schema(description = "阅读人")
+    private String userId;
 
 }

@@ -2,13 +2,22 @@ package com.soft2242.one.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.soft2242.one.common.utils.PageResult;
 import com.soft2242.one.common.utils.Result;
+import com.soft2242.one.convert.NoticeConvert;
 import com.soft2242.one.convert.NoticeQueryConvert;
+
+import com.soft2242.one.dao.RepairDao;
 import com.soft2242.one.entity.NoticeEntity;
 import com.soft2242.one.entity.NoticeReaderEntity;
+
 import com.soft2242.one.query.NoticeQuery;
 import com.soft2242.one.query.NoticeReaderQuery;
+
+import com.soft2242.one.security.user.SecurityUser;
+import com.soft2242.one.security.user.UserDetail;
 import com.soft2242.one.service.NoticeReaderService;
 import com.soft2242.one.service.NoticeService;
 import com.soft2242.one.vo.NoticeVO;
@@ -23,7 +32,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.parser.Entity;
 import java.sql.Wrapper;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author : xuelong
@@ -32,7 +43,7 @@ import java.util.List;
  * @create 2023/5/24 14:59
  */
 @RestController
-@RequestMapping("notice")
+@RequestMapping("property/notice")
 @AllArgsConstructor
 @Tag(name = "公告管理")
 public class NoticeController {
@@ -40,19 +51,60 @@ public class NoticeController {
     private final NoticeService noticeService;
     private final NoticeReaderService noticeReaderService;
 
-
     @GetMapping("page")
     @Operation(summary = "分页")
 //    @PreAuthorize("hasAuthority('sys:user:page')")
     public Result<PageResult<NoticeVO>> page(@ParameterObject @Valid NoticeQuery query) {
-        PageResult<NoticeVO> page = noticeService.page(query);
-        return Result.ok(page);
+        String status = query.getStatus();
+        UserDetail userDetail = SecurityUser.getUser();
+        query.setUserId(String.valueOf(userDetail.getId()));
+        IPage<NoticeEntity> page;
+        HashMap<String, Object> resMap = null;
+        List<NoticeVO> resList = null;
+        if (status == null || "0".equals(status)) {
+//            //先获取未读
+            query.setStatus("1");
+            resMap = noticeService.page(query);
+            page = (IPage<NoticeEntity>) resMap.get("page");
+            resList = (List<NoticeVO>) resMap.get("list");
+            query.setStatus("2");
+            //获取已读数据
+            resMap = noticeService.page(query);
+            IPage<NoticeEntity> page2 = (IPage<NoticeEntity>) resMap.get("page");
+            resList.addAll((List<NoticeVO>) resMap.get("list"));
+            PageResult<NoticeVO> noticeVOPageResult = new PageResult<>(resList, page.getTotal()+page2.getTotal());
+            return Result.ok(noticeVOPageResult);
+        } else {
+            resMap = noticeService.page(query);
+            resList = (List<NoticeVO>) resMap.get("list");
+            page = (IPage<NoticeEntity>) resMap.get("page");
+            PageResult<NoticeVO> noticeVOPageResult = new PageResult<>(resList, page.getTotal());
+            return Result.ok(noticeVOPageResult);
+        }
+
+
+
+
     }
+
+    @GetMapping("{id}")
+    @Operation(summary = "信息")
+//    @PreAuthorize("hasAuthority('soft2242:notice:info')")
+    public Result<NoticeVO> get(@PathVariable("id") String id) {
+        NoticeEntity entity = noticeService.getById(id);
+
+        return Result.ok(NoticeConvert.INSTANCE.convert(entity));
+    }
+
 
     @PostMapping
     @Operation(summary = "保存")
 //    @PreAuthorize("hasAuthority('sys:user:save')")
     public Result<String> save(@RequestBody @Valid NoticeVO vo) {
+        UserDetail userDetail = SecurityUser.getUser();
+        System.out.println(userDetail.getId());
+        vo.setAdminId(userDetail.getId());
+//        vo.setAdminId();
         noticeService.save(vo);
         return Result.ok();
     }
@@ -97,10 +149,11 @@ public class NoticeController {
 //    @PreAuthorize("hasAuthority('sys:user:delete')")
     public Result<PageResult<NoticeVO>> pageReadNotice(@ParameterObject NoticeReaderQuery query) {
         List<NoticeReaderEntity> list = noticeReaderService.getList(query);
-
+        List<Long> noticeIds = list.stream().map(NoticeReaderEntity::getNoticeId).toList();
+        List<NoticeEntity> noticeEntities = noticeService.listByIds(noticeIds);
         NoticeQuery noticeQuery = NoticeQueryConvert.INSTANCE.convert(query);
-        PageResult<NoticeVO> page = noticeService.page(noticeQuery);
-        return Result.ok(page);
+//        PageResult<NoticeVO> page = noticeService.page(noticeQuery);
+        return Result.ok(null);
     }
 
     @GetMapping("readNoticeUser")

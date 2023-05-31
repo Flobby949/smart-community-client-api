@@ -1,7 +1,12 @@
 package com.soft2242.one.dao;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.soft2242.one.entity.NoticeEntity;
 import com.soft2242.one.mybatis.dao.BaseDao;
+import com.soft2242.one.query.NoticeQuery;
+import com.soft2242.one.vo.NoticeVO;
+import com.soft2242.one.vo.RepairVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -15,6 +20,5 @@ import java.util.Map;
  */
 @Mapper
 public interface NoticeDao extends BaseDao<NoticeEntity> {
-
-    List<NoticeEntity> getList(Map<String, Object> params);
+    List<NoticeVO> getList(Map<String, Object> map);
 }
