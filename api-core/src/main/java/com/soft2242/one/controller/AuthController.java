@@ -71,7 +71,7 @@ public class AuthController {
         if (file.isEmpty()) {
             return Result.error("请选择需要上传的文件");
         }
-        String url = aliyunStorageService.upload(file.getBytes(), file.getOriginalFilename());
+        String url = storageService.upload(file.getBytes(), file.getOriginalFilename());
         return Result.ok(url);
     }
 }

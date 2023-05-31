@@ -6,6 +6,7 @@ import com.soft2242.one.dao.OwnerDao;
 import com.soft2242.one.entity.House;
 import com.soft2242.one.entity.OwnerEntity;
 import com.soft2242.one.mybatis.service.impl.BaseServiceImpl;
+import com.soft2242.one.security.user.SecurityUser;
 import com.soft2242.one.service.HouseService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,4 +54,39 @@ public class HouseImpl extends BaseServiceImpl<HouseDao, House> implements House
         wrapper.eq(OwnerEntity::getHouseId, houseId);
         ownerDao.delete(wrapper);
     }
+
+    @Override
+    public List<House> allBuilding(String communityId) {
+        LambdaQueryWrapper<House> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(House::getCommunityId, communityId);
+        return baseMapper.selectList(wrapper);
+    }
+
+    @Override
+    public List<House> allUnit(String communityId, String buildingId) {
+        LambdaQueryWrapper<House> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(House::getBuildingId, buildingId);
+        wrapper.eq(House::getCommunityId, communityId);
+        return baseMapper.selectList(wrapper);
+    }
+
+    @Override
+    public List<House> allHouseByUnit(String communityId, String buildingId, String unit) {
+        LambdaQueryWrapper<House> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(House::getBuildingId, buildingId);
+        wrapper.eq(House::getCommunityId, communityId);
+        wrapper.eq(House::getUnits, unit);
+        return baseMapper.selectList(wrapper);
+    }
+
+    @Override
+    public void saveHouse(OwnerEntity owner) {
+        owner.setRealName(owner.getRealName());
+        owner.setUserId(SecurityUser.getUserId());
+        owner.setOwnerId(SecurityUser.getUserId());
+        owner.setIdentity(1);
+        owner.setState(1);
+        ownerDao.insert(owner);
+    }
+
 }
