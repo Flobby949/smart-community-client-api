@@ -36,6 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.soft2242.one.security.user.SecurityUser.getUser;
+
 /**
  * @Author : xuelong
  * @program
@@ -56,7 +58,7 @@ public class NoticeController {
 //    @PreAuthorize("hasAuthority('sys:user:page')")
     public Result<PageResult<NoticeVO>> page(@ParameterObject @Valid NoticeQuery query) {
         String status = query.getStatus();
-        UserDetail userDetail = SecurityUser.getUser();
+        UserDetail userDetail = getUser();
         query.setUserId(String.valueOf(userDetail.getId()));
         IPage<NoticeEntity> page;
         HashMap<String, Object> resMap = null;
@@ -72,7 +74,7 @@ public class NoticeController {
             resMap = noticeService.page(query);
             IPage<NoticeEntity> page2 = (IPage<NoticeEntity>) resMap.get("page");
             resList.addAll((List<NoticeVO>) resMap.get("list"));
-            PageResult<NoticeVO> noticeVOPageResult = new PageResult<>(resList, page.getTotal()+page2.getTotal());
+            PageResult<NoticeVO> noticeVOPageResult = new PageResult<>(resList, page.getTotal() + page2.getTotal());
             return Result.ok(noticeVOPageResult);
         } else {
             resMap = noticeService.page(query);
@@ -81,8 +83,6 @@ public class NoticeController {
             PageResult<NoticeVO> noticeVOPageResult = new PageResult<>(resList, page.getTotal());
             return Result.ok(noticeVOPageResult);
         }
-
-
 
 
     }
@@ -101,7 +101,7 @@ public class NoticeController {
     @Operation(summary = "保存")
 //    @PreAuthorize("hasAuthority('sys:user:save')")
     public Result<String> save(@RequestBody @Valid NoticeVO vo) {
-        UserDetail userDetail = SecurityUser.getUser();
+        UserDetail userDetail = getUser();
         System.out.println(userDetail.getId());
         vo.setAdminId(userDetail.getId());
 //        vo.setAdminId();
@@ -129,10 +129,20 @@ public class NoticeController {
     @PostMapping("read")
     @Operation(summary = "用户阅读公告")
 //    @PreAuthorize("hasAuthority('sys:user:delete')")
-    public Result<String> readNotice(@RequestBody NoticeReaderEntity entity) {
-        noticeReaderService.save(entity);
-        //增加阅读人数记录
-        NoticeEntity notice = noticeService.getById(entity.getNoticeId());
+    public Result<String> readNotice(@RequestBody NoticeReaderQuery query) {
+        UserDetail user = getUser();
+        query.setUserId(String.valueOf(user.getId()));
+        List<NoticeReaderEntity> list = noticeReaderService.getList(query);
+        if (list == null || list.size() == 0) {
+            NoticeReaderEntity noticeReaderEntity = new NoticeReaderEntity();
+            noticeReaderEntity.setNoticeId(Long.valueOf(query.getNoticeId()));
+            noticeReaderEntity.setUserId(Long.valueOf(query.getUserId()));
+            //增加阅读人数记录
+            noticeReaderService.save(noticeReaderEntity);
+        }
+
+        NoticeEntity notice = noticeService.getById(query.getNoticeId());
+        //增加阅读数
         notice.setReadNumber(notice.getReadNumber() + 1);
         noticeService.updateById(notice);
         return Result.ok();
