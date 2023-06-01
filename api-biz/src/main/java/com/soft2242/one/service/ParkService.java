@@ -2,6 +2,7 @@ package com.soft2242.one.service;
 
 import com.soft2242.one.entity.Park;
 import com.soft2242.one.mybatis.service.BaseService;
+import com.soft2242.one.vo.CartParkVO;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface ParkService extends BaseService<Park> {
      * @return list
      */
     List<Park> getList();
+
+    List<CartParkVO> getMyCartParkVO(Long userId);
 }
