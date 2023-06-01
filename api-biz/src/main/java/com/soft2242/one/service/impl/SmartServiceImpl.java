@@ -61,8 +61,8 @@ public class SmartServiceImpl implements SmartService {
     public void audit(AuditVO auditVO) {
         // 验证业主信息
         OwnerEntity ownerEntity = ownerService.getById(auditVO.getOwnerId());
-        if (!ownerEntity.getHouseId().equals(auditVO.getHouseId())) {
-            throw new ServerException("尚未在当前小区成为业主！");
+        if (ownerEntity == null || !ownerEntity.getHouseId().equals(auditVO.getHouseId())) {
+            throw new ServerException("尚未绑定当前房屋！");
         }
         // 重复审核
         Long communityId = houseService.getById(auditVO.getHouseId()).getCommunityId();
