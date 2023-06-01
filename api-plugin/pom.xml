@@ -10,12 +10,13 @@
     </parent>
 
     <artifactId>api-plugin</artifactId>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
+
     <modules>
         <module>sms-plugin</module>
         <module>file-plugin</module>
         <module>pay-plugin</module>
     </modules>
-
 
 </project>

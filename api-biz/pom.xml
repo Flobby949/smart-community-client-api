@@ -27,6 +27,7 @@
         <dependency>
             <groupId>com.soft2242.one</groupId>
             <artifactId>api-plugin</artifactId>
+            <type>pom</type>
             <version>1.0.0</version>
         </dependency>
         <dependency>
