@@ -15,4 +15,15 @@
         WHERE	t1.deleted = 0
         AND t1.owner_id = #{ownerId}
     </select>
+    <select id="getOwnerId" resultType="java.lang.Long">
+        SELECT t1.id from t_owner t1
+        WHERE t1.deleted=0
+        AND t1.real_name=#{realName}
+        AND t1.phone=#{phone}
+    </select>
+    <select id="getCarId" resultType="java.lang.Long">
+        SELECT t1.id from t_car t1
+        WHERE t1.deleted=0
+          AND t1.licence=#{licence}
+    </select>
 </mapper>
