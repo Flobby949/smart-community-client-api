@@ -46,9 +46,9 @@ public class SmartController {
         return Result.ok();
     }
 
-    @GetMapping("review/{communityId}")
+    @PostMapping("review")
     @Operation(summary = "审核列表")
-    public Result<List<AuditVO>> reviewList(@PathVariable Long communityId) {
+    public Result<List<AuditVO>> reviewList(@RequestParam(required = false) Long communityId) {
         return Result.ok(smartService.auditList(SecurityUser.getUserId(), communityId));
     }
 }
