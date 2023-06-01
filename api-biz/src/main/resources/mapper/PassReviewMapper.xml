@@ -3,7 +3,7 @@
 
 <mapper namespace="com.soft2242.one.dao.PassReviewDao">
 
-    <select id="getOwnerPassReview" resultType="java.lang.Integer" parameterType="long">
+    <select id="getOwnerPassReviewCount" resultType="java.lang.Integer" parameterType="long">
         select count(*)
         from t_pass_review review
         left join t_owner o on o.id = review.owner_id
@@ -19,5 +19,25 @@
             tu.id = #{userId}
         and
             td.id = #{doorId}
+    </select>
+
+    <select id="getOwnerPassReviewList" resultType="com.soft2242.one.vo.AuditVO" parameterType="long">
+        select review.owner_id as ownerId,
+               tu.real_name as realName,
+               review.status,
+               tc.community_name as communityName,
+               review.finger,
+               review.face
+        from t_pass_review review
+                 left join t_owner o on o.id = review.owner_id
+                 left join t_user tu on tu.id = o.user_id
+                 left join t_house th on th.id = review.house_id
+                 left join t_community tc on tc.id = th.community_id
+        where
+            review.deleted = 0
+          and
+            tu.id = #{userId}
+          and
+            tc.id = #{communityId}
     </select>
 </mapper>
