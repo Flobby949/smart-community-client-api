@@ -1,6 +1,7 @@
 package com.soft2242.one.controller;
 
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.soft2242.one.common.utils.PageResult;
 import com.soft2242.one.common.utils.Result;
 import com.soft2242.one.convert.OrderConvert;
@@ -11,10 +12,12 @@ import com.soft2242.one.vo.OrderVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jdk.dynalink.linker.LinkerServices;
 import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 /**
@@ -62,5 +65,11 @@ public class OrderController {
         orderSevice.update(vo);
         return Result.ok();
     }
-
+    @GetMapping("listById/{id}")
+    @Operation(summary = "用户id查询订单列表")
+    public Result<List<OrderVO>> update(@PathVariable Long  id) {
+        List<Order> list = orderSevice.list(Wrappers.lambdaQuery(Order.class).eq(Order::getId, id));
+//        插入社区名和房屋信息
+        return Result.ok(OrderConvert.INSTANCE.convertList(list));
+    }
 }
