@@ -2,6 +2,7 @@ package com.soft2242.one.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.soft2242.one.mybatis.entity.BaseEntity;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,6 +12,7 @@ import lombok.EqualsAndHashCode;
  * @Date: 2023/05/25/11:27
  */
 @Data
+@Builder
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_owner")
 public class OwnerEntity extends BaseEntity {

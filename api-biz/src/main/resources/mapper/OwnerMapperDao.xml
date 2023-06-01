@@ -5,6 +5,20 @@
         <id property="phone" column="phone" />
         <association property="isRegister" column="phone" javaType="string" select="selectUserByPhone" />
     </resultMap>
+    <resultMap id="HouseOptionsResult" type="com.soft2242.one.vo.HouseOptionsVo">
+        <id property="id" column="id" />
+        <collection property="items" javaType="ArrayList" ofType="com.soft2242.one.vo.HouseOptionsVo" column="id" select="selectBudding" />
+    </resultMap>
+    <resultMap id="HouseOptionsResult2" type="com.soft2242.one.vo.HouseOptionsVo">
+        <id property="id" column="id" />
+        <collection property="items" javaType="ArrayList" ofType="com.soft2242.one.vo.HouseOptionsVo" column="{buildingId=id,communityId=community_id}" select="selectHouse" />
+    </resultMap>
+    <select id="selectHouse" resultType="com.soft2242.one.vo.HouseOptionsVo">
+        SELECT house_number as name, id from t_house where building_id=#{buildingId} and community_id=#{communityId}
+    </select>
+    <select id="selectBudding" resultMap="HouseOptionsResult2">
+        SELECT building_name as name,id,community_id from t_building where community_id=#{id}
+    </select>
     <select id="findMyHouseById" resultType="com.soft2242.one.vo.MyHouseListVo">
         SELECT CONCAT(b.community_name,b.building_name,b.units,'单元',b.house_number) as name ,a.house_id FROM t_owner a,t_house b where a.user_id=#{userId} and a.identity=0 and a.state=1 and a.deleted=0 and a.house_id=b.id
     </select>
@@ -17,4 +31,7 @@
     <update id="deleteFamily" >
         update t_owner set deleted=1 , update_time=now()  where id=#{id}  and owner_id in(SELECT id from(select id from t_owner where user_id=#{userId} and identity=0 and state=1 and deleted=0)a )
     </update>
+    <select id="findHouseOptions" resultMap="HouseOptionsResult">
+        SELECT community_name as name,id from t_community
+    </select>
 </mapper>

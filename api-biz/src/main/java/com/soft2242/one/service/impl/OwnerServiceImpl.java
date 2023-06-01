@@ -4,6 +4,7 @@ import com.soft2242.one.dao.OwnerDao;
 import com.soft2242.one.entity.OwnerEntity;
 import com.soft2242.one.mybatis.service.impl.BaseServiceImpl;
 import com.soft2242.one.service.OwnerService;
+import com.soft2242.one.vo.HouseOptionsVo;
 import com.soft2242.one.vo.MyFamilyVo;
 import com.soft2242.one.vo.MyHouseListVo;
 import org.springframework.stereotype.Service;
@@ -30,5 +31,10 @@ public class OwnerServiceImpl extends BaseServiceImpl<OwnerDao, OwnerEntity> imp
     @Override
     public boolean deleteFamily(Long id, Long userId) {
         return baseMapper.deleteFamily(id, userId)>0;
+    }
+
+    @Override
+    public List<HouseOptionsVo> findHouseOptions() {
+        return baseMapper.findHouseOptions();
     }
 }
