@@ -129,4 +129,12 @@ public class OrderVO implements Serializable {
 
     @Schema(description = "订单计算金额")
     private Double OrderMoney;
+
+    @Schema(description = "订单类型名称")
+    private String orderTypeName ;
+
+    @Schema(description = "房屋面积")
+    private Integer area;
+
+
 }

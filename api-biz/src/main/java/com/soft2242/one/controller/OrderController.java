@@ -13,6 +13,7 @@ import com.soft2242.one.service.HouseService;
 import com.soft2242.one.service.IOrderService;
 import com.soft2242.one.vo.OrderVO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jdk.dynalink.linker.LinkerServices;
@@ -54,8 +55,8 @@ public class OrderController {
     @GetMapping("{id}")
     @Operation(summary = "账单查询")
     public Result<OrderVO> get(@PathVariable("id") Long id) {
-        Order entity = orderSevice.getById(id);
-        return Result.ok(OrderConvert.INSTANCE.convert(entity));
+
+        return Result.ok(orderSevice.getByOrderId(id));
     }
 
     @PostMapping
@@ -73,10 +74,12 @@ public class OrderController {
         return Result.ok();
     }
 
-    @GetMapping("listById/{id}")
+    @GetMapping("listById")
     @Operation(summary = "用户id查询订单列表")
-    public Result<List<OrderVO>> listById(@PathVariable Long  id) {
-        List<OrderVO> list = orderSevice.listById(Wrappers.lambdaQuery(Order.class).eq(Order::getId, id));
+    public Result<List<OrderVO>> listById(@Parameter Long  id,@Parameter Integer status) {
+        List<OrderVO> list = orderSevice.listById(Wrappers.lambdaQuery(Order.class)
+                .eq(Order::getUserId, id)
+                .eq(Order::getStatus,status));
 //        插入社区名和房屋信息
         return Result.ok(list);
     }

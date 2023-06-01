@@ -37,6 +37,23 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
     private String changeForm(LocalDateTime create, LocalDateTime end) {
         return create.toString().substring(0, 10) + "~" + end.toString().substring(0, 10);
     }
+    private String orderTypeSelector(Integer id){
+//        订单类型 0：购买车位订单1：租赁车位订单2：停车订单3：水费4：电费5：物业费
+        String name = "";
+        if (id == 0)
+            name = "购车位订单";
+        if (id == 1)
+            name = "租车车位订单";
+        if (id == 2)
+            name = "停车订单";
+        if (id == 3)
+            name = "水费";
+        if (id == 4)
+            name = "电费";
+        if (id == 5)
+            name = "物业费";
+        return name;
+    }
     private List<OrderVO> changeVO(List<OrderVO> orderVOS) {
         orderVOS.forEach(orderVO -> {
             House house = houseService.getById(orderVO.getHouseId());
@@ -50,6 +67,9 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
 //                计算价格
                 orderVO.setOrderMoney(
                         Double.parseDouble(orderVO.getPrice())* orderVO.getAmount()
+                );
+                orderVO.setOrderTypeName(
+                        orderTypeSelector(orderVO.getOrderType())
                 );
             }
         });
@@ -86,6 +106,33 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         List<OrderVO> orderVOS = OrderConvert.INSTANCE.convertList(list);
 
         return changeVO(orderVOS);
+    }
+
+    @Override
+    public OrderVO getByOrderId(Long id) {
+        Order byId = getById(id);
+        OrderVO orderVO = OrderConvert.INSTANCE.convert(byId);
+
+        House house = houseService.getById(orderVO.getHouseId());
+        if (house != null) {
+//                插入房屋信息单元门牌号
+            orderVO.setHouseNumber(house.getHouseNumber());
+//                插入社区名
+            orderVO.setCommunityName(communityService.getById(house.getCommunityId()).getCommunityName());
+//                插入时间差
+            orderVO.setOTime(changeForm(orderVO.getCreateTime(), orderVO.getEndTime()));
+//                计算价格
+            orderVO.setOrderMoney(
+                    Double.parseDouble(orderVO.getPrice())* orderVO.getAmount()
+            );
+            orderVO.setOrderTypeName(
+                    orderTypeSelector(orderVO.getOrderType())
+            );
+            orderVO.setArea(
+                    house.getHouseArea()
+            );
+        }
+        return orderVO;
     }
 
 
