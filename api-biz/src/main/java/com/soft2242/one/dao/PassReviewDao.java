@@ -2,8 +2,11 @@ package com.soft2242.one.dao;
 
 import com.soft2242.one.mybatis.dao.BaseDao;
 import com.soft2242.one.entity.PassReviewEntity;
+import com.soft2242.one.vo.AuditVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * 门禁审核
@@ -13,5 +16,7 @@ import org.apache.ibatis.annotations.Param;
 */
 @Mapper
 public interface PassReviewDao extends BaseDao<PassReviewEntity> {
-    Integer getOwnerPassReview(@Param("userId") Long userId, @Param("doorId") Long doorId);
+    Integer getOwnerPassReviewCount(@Param("userId") Long userId, @Param("doorId") Long doorId);
+
+    List<AuditVO> getOwnerPassReviewList(@Param("userId") Long userId, @Param("communityId") Long communityId);
 }

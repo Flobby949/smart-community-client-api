@@ -3,14 +3,12 @@ package com.soft2242.one.controller;
 import com.soft2242.one.common.utils.Result;
 import com.soft2242.one.security.user.SecurityUser;
 import com.soft2242.one.service.SmartService;
+import com.soft2242.one.vo.AuditVO;
 import com.soft2242.one.vo.DoorListItemVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,5 +37,18 @@ public class SmartController {
     public Result<String> openDoor(@RequestParam Long doorId, @RequestParam Integer passWay) {
         smartService.openDoor(doorId, SecurityUser.getUserId(), passWay);
         return Result.ok();
+    }
+
+    @PostMapping("audit")
+    @Operation(summary = "提交门禁审核")
+    public Result<String> audit(@RequestBody AuditVO auditVO) {
+        smartService.audit(auditVO);
+        return Result.ok();
+    }
+
+    @PostMapping("review")
+    @Operation(summary = "审核列表")
+    public Result<List<AuditVO>> reviewList(@RequestParam(required = false) Long communityId) {
+        return Result.ok(smartService.auditList(SecurityUser.getUserId(), communityId));
     }
 }
