@@ -18,7 +18,6 @@ import java.util.Map;
 public interface CarportDao extends BaseDao<Carport> {
 
     List<CarportVO> getList(Long ownerId);
-
     int update(Long ownerId);
 
 }

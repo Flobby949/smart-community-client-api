@@ -35,4 +35,10 @@ public interface CarportService extends BaseService<Carport> {
      */
     boolean save(CarportVO vo);
 
+
+    /**
+     * 获取空闲的车位信息
+     * @return
+     */
+    List<CarportVO> getNoOwner();
 }

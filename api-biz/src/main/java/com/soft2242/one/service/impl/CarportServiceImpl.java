@@ -11,7 +11,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName CarportServiceImpl
@@ -46,6 +48,14 @@ public class CarportServiceImpl extends BaseServiceImpl<CarportDao, Carport> imp
         Carport entity = CarportConvert.INSTANCE.convert(vo);
         baseMapper.insert(entity);
         return true;
+    }
+
+    @Override
+    public List<CarportVO> getNoOwner() {
+        Map<String,Object> params=new HashMap<String, Object>();
+        params.put("status",0);
+        List<Carport> carportList = baseMapper.selectByMap(params);
+        return CarportConvert.INSTANCE.convertList(carportList);
     }
 
 }

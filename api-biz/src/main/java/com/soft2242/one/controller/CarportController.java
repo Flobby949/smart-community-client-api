@@ -56,4 +56,11 @@ public class CarportController {
         return Result.ok();
     }
 
+
+    @GetMapping("/noOwner")
+    @Operation(summary = "空闲的车位")
+    public Result<List<CarportVO>> getNoOwner(){
+        List<CarportVO> noOwner = carportService.getNoOwner();
+        return Result.ok(noOwner);
+    }
 }
