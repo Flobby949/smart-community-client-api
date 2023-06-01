@@ -14,6 +14,7 @@ public class DoorListItemVO {
     private Integer doorId;
     private String doorName;
     private String doorImg;
+    private Integer onlineStatus;
     /**
      * 设备状态（0：正常 1：故障）
      */
