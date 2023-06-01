@@ -8,6 +8,7 @@ import com.soft2242.one.convert.RepairConvert;
 import com.soft2242.one.entity.RepairEntity;
 import com.soft2242.one.query.RepairQuery;
 
+import com.soft2242.one.security.user.UserDetail;
 import com.soft2242.one.service.RepairService;
 
 import com.soft2242.one.utils.MyUtils;
@@ -24,6 +25,8 @@ import jakarta.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.soft2242.one.security.user.SecurityUser.getUser;
 
 /**
 * 报修表
@@ -42,7 +45,7 @@ public class RepairController {
 //    @PreAuthorize("hasAuthority('soft2242:repair:page')")
     public Result<PageResult<RepairVO>> page(@ParameterObject @Valid RepairQuery query){
         PageResult<RepairVO> page = repairService.page(query);
-        List<RepairVO> list = page.getList();
+//        List<RepairVO> list = page.getList();
 //        for (RepairVO vo: list) {
 //            String employees = vo.getEmployees();
 //            vo.setEmployeeIds(MyUtils.convertToArray(employees));
@@ -65,15 +68,16 @@ public class RepairController {
     @Operation(summary = "信息")
 //    @PreAuthorize("hasAuthority('soft2242:repair:info')")
     public Result<RepairVO> get(@PathVariable("id") Long id){
-        RepairEntity entity = repairService.getById(id);
-
-        return Result.ok(RepairConvert.INSTANCE.convert(entity));
+        RepairVO vo = repairService.getById2(String.valueOf(id));
+        return Result.ok(vo);
     }
 
     @PostMapping
     @Operation(summary = "保存")
 //    @PreAuthorize("hasAuthority('soft2242:repair:save')")
     public Result<String> save(@RequestBody RepairVO vo){
+        UserDetail user = getUser();
+        vo.setUserId(user.getId());
         repairService.save(vo);
 
         return Result.ok();

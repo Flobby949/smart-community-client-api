@@ -19,6 +19,8 @@ public interface RepairService extends BaseService<RepairEntity> {
 
     PageResult<RepairVO> page(RepairQuery query);
 
+    RepairVO getById2(String id);
+
     void save(RepairVO vo);
 
     void update(RepairVO vo);

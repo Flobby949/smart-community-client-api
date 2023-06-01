@@ -49,6 +49,17 @@ public class RepairServiceImpl extends BaseServiceImpl<RepairDao, RepairEntity> 
         return new PageResult<>(list, page.getTotal());
     }
 
+    @Override
+    public RepairVO getById2(String id) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("communityId", id);
+        List<RepairVO> list = repairDao.getList(map);
+        if (list != null && list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
+    }
+
     private LambdaQueryWrapper<RepairEntity> getWrapper(RepairQuery query){
         LambdaQueryWrapper<RepairEntity> wrapper = Wrappers.lambdaQuery();
         wrapper.in(ArrayUtils.isNotEmpty(query.getCommunityId()),RepairEntity::getCommunityId, query.getCommunityId());

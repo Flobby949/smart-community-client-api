@@ -32,6 +32,7 @@ public class NoticeReaderEntity {
      */
     private Long userId;
 
+
     /**
      * 创建时间
      */
