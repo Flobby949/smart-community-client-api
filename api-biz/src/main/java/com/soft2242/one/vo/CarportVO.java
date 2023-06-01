@@ -56,6 +56,7 @@ public class CarportVO implements Serializable {
     @Schema(description = "车位状态(0：闲置 1：已租 2：已售)")
     private Integer status;
 
+    //修改
     @Schema(description = "租赁(购买)开始时间")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date startTime;
