@@ -1,7 +1,10 @@
 package com.soft2242.one.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotation.*;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +16,9 @@ import java.time.LocalDateTime;
  */
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName("t_activity")
 public class Activity {
 
@@ -114,163 +120,6 @@ public class Activity {
 	 */
 	private LocalDateTime updateTime;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public Long getCommunityId() {
-		return communityId;
-	}
-
-	public void setCommunityId(Long communityId) {
-		this.communityId = communityId;
-	}
-	public String getProperty() {
-		return property;
-	}
-
-	public void setProperty(String property) {
-		this.property = property;
-	}
-	public Integer getSort() {
-		return sort;
-	}
-
-	public void setSort(Integer sort) {
-		this.sort = sort;
-	}
-	public String getActivityName() {
-		return activityName;
-	}
-
-	public void setActivityName(String activityName) {
-		this.activityName = activityName;
-	}
-	public Long getTypeId() {
-		return typeId;
-	}
-
-	public void setTypeId(Long typeId) {
-		this.typeId = typeId;
-	}
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-	public String getViewerCount() {
-		return viewerCount;
-	}
-
-	public void setViewerCount(String viewerCount) {
-		this.viewerCount = viewerCount;
-	}
-	public String getTel() {
-		return tel;
-	}
-
-	public void setTel(String tel) {
-		this.tel = tel;
-	}
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-	public LocalDateTime getPublishTime() {
-		return publishTime;
-	}
-
-	public void setPublishTime(LocalDateTime publishTime) {
-		this.publishTime = publishTime;
-	}
-	public LocalDateTime getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(LocalDateTime endTime) {
-		this.endTime = endTime;
-	}
-	public Integer getDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(Integer deleted) {
-		this.deleted = deleted;
-	}
-	public LocalDateTime getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(LocalDateTime createTime) {
-		this.createTime = createTime;
-	}
-	public Long getCreator() {
-		return creator;
-	}
-
-	public void setCreator(Long creator) {
-		this.creator = creator;
-	}
-	public Long getUpdater() {
-		return updater;
-	}
-
-	public void setUpdater(Long updater) {
-		this.updater = updater;
-	}
-	public LocalDateTime getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(LocalDateTime updateTime) {
-		this.updateTime = updateTime;
-	}
-
-	@Override
-	public String toString() {
-		return "Activity{" +
-				"id=" + id +
-				", communityId=" + communityId +
-				", property=" + property +
-				", sort=" + sort +
-				", activityName=" + activityName +
-				", typeId=" + typeId +
-				", title=" + title +
-				", content=" + content +
-				", location=" + location +
-				", viewerCount=" + viewerCount +
-				", tel=" + tel +
-				", status=" + status +
-				", publishTime=" + publishTime +
-				", endTime=" + endTime +
-				", deleted=" + deleted +
-				", createTime=" + createTime +
-				", creator=" + creator +
-				", updater=" + updater +
-				", updateTime=" + updateTime +
-				"}";
-	}
+	private String cover;
 
 }
