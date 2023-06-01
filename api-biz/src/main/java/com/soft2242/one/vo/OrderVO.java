@@ -103,4 +103,30 @@ public class OrderVO implements Serializable {
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
 
+    /**
+     * 房屋表主键
+     */
+    @Schema(description = "房屋")
+    private Long houseId;
+
+    /**
+     * 业主表主键
+     */
+    @Schema(description = "业主")
+    private Long ownerId;
+
+    @Schema(description = "订单结束时间")
+    private LocalDateTime endTime;
+
+    @Schema(description = "房屋地址")
+    private String houseNumber;
+
+    @Schema(description = "小区名字")
+    private String communityName;
+
+    @Schema(description = "订单时间段")
+    private String OTime;
+
+    @Schema(description = "订单计算金额")
+    private Double OrderMoney;
 }
