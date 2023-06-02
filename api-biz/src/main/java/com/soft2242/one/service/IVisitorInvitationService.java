@@ -25,11 +25,13 @@ public interface IVisitorInvitationService extends BaseService<VisitorInvitation
     PageResult<VisitorInvitationVO> page(VisitorInvitationQuery query);
     PageResult<VisitorInvitationVO> getAll(Long userId);
 
+//    增加访客再增加访客邀请记录
     void save(VisitorInvitationVO vo);
 
     void update(VisitorInvitationVO vo);
 
 
     List<VisitorInvitation> getAll2(Long userId);
+
 
 }

@@ -17,11 +17,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
-<<<<<<< HEAD
+ * <<<<<<< HEAD
  * 服务实现类
-=======
- *  服务实现类
->>>>>>> origin/test
+ * =======
+ * 服务实现类
+ * >>>>>>> origin/test
  * </p>
  *
  * @author ysh
@@ -44,7 +44,9 @@ public class VisitorServiceImpl extends BaseServiceImpl<VisitorMapper, Visitor> 
 
     @Override
     public void save(VisitorVO vo) {
-        baseMapper.insert(VisitorConvert.INSTANCE.convert(vo));
+//        判断非空校验
+        if (vo.getPhone() != null || vo.getName() != null || !vo.getPhone().equals("") || !vo.getName().equals(""))
+            baseMapper.insert(VisitorConvert.INSTANCE.convert(vo));
     }
 
     @Override

@@ -2,9 +2,9 @@ package com.soft2242.one.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.soft2242.one.mybatis.entity.BaseEntity;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
+
+import java.io.Serializable;
 
 /**
  * @ClassName: OwnerEntity
@@ -12,10 +12,12 @@ import lombok.EqualsAndHashCode;
  * @Date: 2023/05/25/11:27
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_owner")
-public class OwnerEntity extends BaseEntity {
+public class OwnerEntity extends BaseEntity implements Serializable {
     /**
      * 用户id
      */

@@ -1,25 +1,30 @@
 package com.soft2242.one.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Schema(description = "访客开门登记")
 public class VisitorVO implements Serializable {
     private static final long serialVersionUID = 1L;
     @Schema(description = "id")
 
-    private Integer id;
+    private Long id;
 
     /**
      * 绑定业主id
      */
     @Schema(description = "绑定业主id")
-    private Integer ownerId;
+    private Long ownerId;
 
     /**
      * 访客姓名
