@@ -19,10 +19,13 @@ import java.util.List;
 public interface ComplaintConvert {
     ComplaintConvert INSTANCE = Mappers.getMapper(ComplaintConvert.class);
     @Mapping(target = "employeeIds",source = "employeeIds",qualifiedByName = "convertToString")
+    @Mapping(target = "imgs",source = "imgs",qualifiedByName = "convertToString")
     ComplaintEntity convert(ComplaintVO vo);
     @Mapping(target = "employeeIds",source = "employeeIds",qualifiedByName = "convertToArray")
+    @Mapping(target = "imgs",source = "imgs",qualifiedByName = "convertToArray")
     ComplaintVO convert(ComplaintEntity entity);
     @Mapping(target = "employeeIds",source = "employeeIds",qualifiedByName = "convertToArray")
+    @Mapping(target = "imgs",source = "imgs",qualifiedByName = "convertToArray")
     List<ComplaintVO> convertList(List<ComplaintEntity> list);
 
 }
