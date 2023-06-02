@@ -6,6 +6,7 @@
     <select id="getList" resultType="com.soft2242.one.vo.ComplaintVO">
         select distinct t1.*,t1.employee_ids employees,
         t2.community_name,
+        t1.imgs imgsd,
         t3.real_name userName
         from t_complaint t1
         join t_community t2 on t2.id = t1.community_id
