@@ -19,10 +19,13 @@ public interface RepairConvert {
 
     RepairConvert INSTANCE = Mappers.getMapper(RepairConvert.class);
     @Mapping(target = "employeeIds",source = "employeeIds",qualifiedByName = "convertToString")
+    @Mapping(target = "imgs",source = "imgs",qualifiedByName = "convertToString")
     RepairEntity convert(RepairVO vo);
     @Mapping(target = "employeeIds",source = "employeeIds",qualifiedByName = "convertToArray")
+    @Mapping(target = "imgs",source = "imgs",qualifiedByName = "convertToArray")
     RepairVO convert(RepairEntity entity);
     @Mapping(target = "employeeIds",source = "employeeIds",qualifiedByName = "convertToArray")
+    @Mapping(target = "imgs",source = "imgs",qualifiedByName = "convertToArray")
     List<RepairVO> convertList(List<RepairEntity> list);
 
 
