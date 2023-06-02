@@ -19,19 +19,7 @@ import java.util.List;
 /**
  * <p>
  * 服务实现类
-=======
-import com.soft2242.one.entity.VisitorInvitation;
-import com.soft2242.one.dao.VisitorInvitationMapper;
-import com.soft2242.one.service.IVisitorInvitationService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
 
-/**
- * <p>
- *  服务实现类
->>>>>>> origin/test
- * </p>
- *
  * @author ysh
  * @since 2023-05-25
  */

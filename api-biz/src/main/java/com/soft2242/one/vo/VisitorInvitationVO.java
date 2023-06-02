@@ -15,19 +15,19 @@ public class VisitorInvitationVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "id")
-    private Integer id;
+    private Long id;
 
     /**
      * 访客表主键
      */
     @Schema(description = "访客表主键")
-    private Integer visitorId;
+    private Long visitorId;
 
     /**
      * 绑定业主id
      */
     @Schema(description = "绑定业主id")
-    private Integer userId;
+    private Long userId;
 
 
     /**
@@ -78,7 +78,14 @@ public class VisitorInvitationVO implements Serializable {
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
 
+    @Schema(description = "访客手机号")
+    private String phone;
 
+    @Schema(description = "访客姓名")
+    private String visitorName;
+
+    @Schema(description = "房屋主键")
+    private Long houseId;
 
 
 

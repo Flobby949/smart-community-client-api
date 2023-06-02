@@ -3,7 +3,11 @@ package com.soft2242.one.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import nonapi.io.github.classgraph.utils.LogNode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -17,6 +21,9 @@ import java.time.LocalDateTime;
  * @since 2023-05-25
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @TableName("t_visitor")
 public class Visitor implements Serializable {
 
@@ -26,12 +33,12 @@ public class Visitor implements Serializable {
      * 自增主键
      */
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     /**
      * 绑定业主id
      */
-    private Integer ownerId;
+    private Long ownerId;
 
     /**
      * 访客姓名
@@ -86,110 +93,5 @@ public class Visitor implements Serializable {
 
     private LocalDateTime updateTime;
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public Integer getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Integer ownerId) {
-        this.ownerId = ownerId;
-    }
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-    public String getDoorIds() {
-        return doorIds;
-    }
-
-    public void setDoorIds(String doorIds) {
-        this.doorIds = doorIds;
-    }
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
-    public Integer getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Integer deleted) {
-        this.deleted = deleted;
-    }
-    public LocalDateTime getCreateTime1() {
-
-        return createTime;
-    }
-
-    public void setCreateTime1(LocalDateTime createTime1) {
-        this.createTime = createTime1;
-
-    }
-    public Long getCreator() {
-        return creator;
-    }
-
-    public void setCreator(Long creator) {
-        this.creator = creator;
-    }
-    public Long getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(Long updater) {
-        this.updater = updater;
-    }
-    public LocalDateTime getUpdateTime1() {
-
-        return updateTime;
-    }
-
-    public void setUpdateTime1(LocalDateTime updateTime1) {
-        this.updateTime = updateTime1;
-
-    }
-
-    @Override
-    public String toString() {
-        return "Visitor{" +
-            "id=" + id +
-            ", ownerId=" + ownerId +
-            ", name=" + name +
-            ", phone=" + phone +
-            ", doorIds=" + doorIds +
-            ", status=" + status +
-            ", count=" + count +
-            ", deleted=" + deleted +
-            ", createTime1=" + createTime +
-            ", creator=" + creator +
-            ", updater=" + updater +
-            ", updateTime1=" + updateTime +
-        "}";
-    }
 }
