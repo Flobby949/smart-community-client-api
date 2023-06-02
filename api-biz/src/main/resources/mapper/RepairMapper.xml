@@ -29,6 +29,7 @@
         SELECT
         t1.*,
         t1.employee_ids AS employees,
+        t1.imgs imgsd,
         t2.community_name,
         CASE
         WHEN t1.user_type = 1 THEN t4.real_name

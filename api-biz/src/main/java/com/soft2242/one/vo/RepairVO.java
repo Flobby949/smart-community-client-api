@@ -44,7 +44,8 @@ public class RepairVO implements Serializable {
 	private String content;
 
 	@Schema(description = "图片")
-	private String imgs;
+	private String[] imgs;
+	private String imgsd;
 
 	@Schema(description = "处理状态（0：未处理，1：处理中，2：已处理，3：已评价）")
 	private Integer state;

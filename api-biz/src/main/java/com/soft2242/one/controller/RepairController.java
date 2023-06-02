@@ -29,53 +29,45 @@ import java.util.List;
 import static com.soft2242.one.security.user.SecurityUser.getUser;
 
 /**
-* 报修表
-*
-* @author 软件2242 soft2242@gmail.com
-* @since 1.0.0 2023-05-26
-*/
+ * 报修表
+ *
+ * @author 软件2242 soft2242@gmail.com
+ * @since 1.0.0 2023-05-26
+ */
 @RestController
 @RequestMapping("property/repair")
-@Tag(name="报修表")
+@Tag(name = "报修表")
 @AllArgsConstructor
 public class RepairController {
     private final RepairService repairService;
+
     @GetMapping("page")
     @Operation(summary = "分页")
 //    @PreAuthorize("hasAuthority('soft2242:repair:page')")
-    public Result<PageResult<RepairVO>> page(@ParameterObject @Valid RepairQuery query){
+    public Result<PageResult<RepairVO>> page(@ParameterObject @Valid RepairQuery query) {
         PageResult<RepairVO> page = repairService.page(query);
-//        List<RepairVO> list = page.getList();
-//        for (RepairVO vo: list) {
-//            String employees = vo.getEmployees();
-//            vo.setEmployeeIds(MyUtils.convertToArray(employees));
-//            String[] employeeIds = vo.getEmployeeIds();
-//            if (employeeIds != null) {
-//                ArrayList<String> names = new ArrayList<String>();
-//                for (String employeeId : employeeIds) {
-//                    //登录用户的信息来获取
-//                    SysUserInfoEntity entity = sysUserService.getUserInfoByAdminId(Long.valueOf(employeeId));
-//                    names.add(entity.getRealName());
-//                }
-//                vo.setEmployeeNames(names.toArray(new String[names.size()]));
-//            }
-//
-//        }
+        List<RepairVO> list = page.getList();
+        for (RepairVO vo : list) {
+            String imgs = vo.getImgsd();
+            vo.setImgs(MyUtils.convertToArray(imgs));
+        }
         return Result.ok(page);
     }
 
     @GetMapping("{id}")
     @Operation(summary = "信息")
 //    @PreAuthorize("hasAuthority('soft2242:repair:info')")
-    public Result<RepairVO> get(@PathVariable("id") Long id){
+    public Result<RepairVO> get(@PathVariable("id") Long id) {
         RepairVO vo = repairService.getById2(String.valueOf(id));
+        String imgs = vo.getImgsd();
+        vo.setImgs(MyUtils.convertToArray(imgs));
         return Result.ok(vo);
     }
 
     @PostMapping
     @Operation(summary = "保存")
 //    @PreAuthorize("hasAuthority('soft2242:repair:save')")
-    public Result<String> save(@RequestBody RepairVO vo){
+    public Result<String> save(@RequestBody RepairVO vo) {
         UserDetail user = getUser();
         vo.setUserId(user.getId());
         repairService.save(vo);
@@ -86,7 +78,7 @@ public class RepairController {
     @PutMapping
     @Operation(summary = "修改")
 //    @PreAuthorize("hasAuthority('soft2242:repair:update')")
-    public Result<String> update(@RequestBody @Valid RepairVO vo){
+    public Result<String> update(@RequestBody @Valid RepairVO vo) {
         repairService.update(vo);
 
         return Result.ok();
@@ -95,7 +87,7 @@ public class RepairController {
     @DeleteMapping
     @Operation(summary = "删除")
 //    @PreAuthorize("hasAuthority('soft2242:repair:delete')")
-    public Result<String> delete(@RequestBody List<Long> idList){
+    public Result<String> delete(@RequestBody List<Long> idList) {
         repairService.delete(idList);
 
         return Result.ok();
