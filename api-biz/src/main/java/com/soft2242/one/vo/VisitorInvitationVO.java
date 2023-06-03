@@ -7,6 +7,8 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 @Data
 @Schema(description = "访客邀请")
@@ -86,8 +88,15 @@ public class VisitorInvitationVO implements Serializable {
 
     @Schema(description = "房屋主键")
     private Long houseId;
+    @Schema(description = "小区")
+    private String communityName;
+    @Schema(description = "房屋信息")
+    private String houseInfo;
 
-
-
-
+    @Schema(description = "闸机入口")
+    private String[] gates;
+    @Schema(description = "有效时长")
+    private String validTime;
+    @Schema(description = "单元楼主键")
+    private Long buildingId;
 }

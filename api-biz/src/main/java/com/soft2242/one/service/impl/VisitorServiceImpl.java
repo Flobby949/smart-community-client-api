@@ -16,13 +16,7 @@ import com.soft2242.one.vo.VisitorVO;
 import org.springframework.stereotype.Service;
 
 /**
- * <p>
- * <<<<<<< HEAD
- * 服务实现类
- * =======
- * 服务实现类
- * >>>>>>> origin/test
- * </p>
+
  *
  * @author ysh
  * @since 2023-05-25
