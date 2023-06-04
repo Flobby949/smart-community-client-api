@@ -1,22 +1,18 @@
 package com.soft2242.one.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.soft2242.one.common.utils.PageResult;
 import com.soft2242.one.common.utils.Result;
 import com.soft2242.one.convert.NoticeConvert;
 import com.soft2242.one.convert.NoticeQueryConvert;
 
-import com.soft2242.one.dao.RepairDao;
 import com.soft2242.one.entity.NoticeEntity;
 import com.soft2242.one.entity.NoticeReaderEntity;
 
 import com.soft2242.one.query.NoticeQuery;
 import com.soft2242.one.query.NoticeReaderQuery;
 
-import com.soft2242.one.security.user.SecurityUser;
 import com.soft2242.one.security.user.UserDetail;
 import com.soft2242.one.service.NoticeReaderService;
 import com.soft2242.one.service.NoticeService;
@@ -26,15 +22,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
-import javax.swing.text.html.parser.Entity;
-import java.sql.Wrapper;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.soft2242.one.security.user.SecurityUser.getUser;
 
@@ -73,6 +66,9 @@ public class NoticeController {
             //获取已读数据
             resMap = noticeService.page(query);
             IPage<NoticeEntity> page2 = (IPage<NoticeEntity>) resMap.get("page");
+            if (resList == null || resList.size() == 0) {
+                resList = new ArrayList<NoticeVO>();
+            }
             resList.addAll((List<NoticeVO>) resMap.get("list"));
             PageResult<NoticeVO> noticeVOPageResult = new PageResult<>(resList, page.getTotal() + page2.getTotal());
             return Result.ok(noticeVOPageResult);
@@ -83,8 +79,6 @@ public class NoticeController {
             PageResult<NoticeVO> noticeVOPageResult = new PageResult<>(resList, page.getTotal());
             return Result.ok(noticeVOPageResult);
         }
-
-
     }
 
     @GetMapping("{id}")
@@ -157,7 +151,7 @@ public class NoticeController {
     @GetMapping("readNotice")
     @Operation(summary = "查找指定用户的阅读的公告集合")
 //    @PreAuthorize("hasAuthority('sys:user:delete')")
-    public Result<PageResult<NoticeVO>> pageReadNotice(@ParameterObject NoticeReaderQuery query) {
+    public Result<PageResult<NoticeVO>> readNoticeList(@ParameterObject NoticeReaderQuery query) {
         List<NoticeReaderEntity> list = noticeReaderService.getList(query);
         List<Long> noticeIds = list.stream().map(NoticeReaderEntity::getNoticeId).toList();
         List<NoticeEntity> noticeEntities = noticeService.listByIds(noticeIds);
@@ -166,10 +160,29 @@ public class NoticeController {
         return Result.ok(null);
     }
 
+    /**
+     * 查找指定用户,读了哪些公告
+     *
+     * @return
+     */
+    @GetMapping("readNoticeNum")
+    @Operation(summary = "查找指定用户的阅读的公告数量")
+//    @PreAuthorize("hasAuthority('sys:user:delete')")
+    public Result<Long> readNoticeNum() {
+        //已读帖子
+        UserDetail user = getUser();
+        NoticeReaderQuery query = new NoticeReaderQuery();
+        query.setUserId(String.valueOf(user.getId()));
+        List<NoticeReaderEntity> list = noticeReaderService.getList(query);
+        long count = noticeService.count();
+        long unRead = count - list.size();
+        return Result.ok(unRead);
+    }
+
     @GetMapping("readNoticeUser")
     @Operation(summary = "读了某个帖子的用户集合")
 //    @PreAuthorize("hasAuthority('sys:user:delete')")
-    public Result<List<NoticeReaderEntity>> pageReadNoticeUser(@ParameterObject NoticeReaderQuery query) {
+    public Result<List<NoticeReaderEntity>> readNoticeUser(@ParameterObject NoticeReaderQuery query) {
         List<NoticeReaderEntity> list = noticeReaderService.getList(query);
 
         return Result.ok(list);
