@@ -136,5 +136,6 @@ public class OrderVO implements Serializable {
     @Schema(description = "房屋面积")
     private Integer area;
 
-
+    @Schema(description = "单元号")
+    private Integer units;
 }
