@@ -22,19 +22,25 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserServiceImpl extends BaseServiceImpl<UserDao, UserEntity> implements UserService {
     private final AccountDao accountDao;
+
     @Override
     public AccountEntity getUserByPhone(String phone) {
         return accountDao.getByPhone(phone);
     }
 
     @Override
+    public UserEntity getInfoByPhone(String phone) {
+        return baseMapper.getInfoByPhone(phone);
+    }
+
+    @Override
     public void updateUserInfo(UserEntity user) {
         LambdaUpdateWrapper<UserEntity> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.set(StringUtils.isNotEmpty(user.getUsername()),UserEntity::getUsername,user.getUsername())
-                .set(user.getGender()!=null,UserEntity::getGender,user.getGender())
-                .set(StringUtils.isNotEmpty(user.getAddress()),UserEntity::getAddress,user.getAddress())
-                .set(StringUtils.isNotEmpty(user.getAvatar()),UserEntity::getAvatar,user.getAvatar())
-                .eq(UserEntity::getId,user.getId());
-        baseMapper.update(new UserEntity(),wrapper);
+        wrapper.set(StringUtils.isNotEmpty(user.getUsername()), UserEntity::getUsername, user.getUsername())
+                .set(user.getGender() != null, UserEntity::getGender, user.getGender())
+                .set(StringUtils.isNotEmpty(user.getAddress()), UserEntity::getAddress, user.getAddress())
+                .set(StringUtils.isNotEmpty(user.getAvatar()), UserEntity::getAvatar, user.getAvatar())
+                .eq(UserEntity::getId, user.getId());
+        baseMapper.update(new UserEntity(), wrapper);
     }
 }

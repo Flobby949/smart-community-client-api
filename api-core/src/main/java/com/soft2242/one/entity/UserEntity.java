@@ -2,8 +2,7 @@ package com.soft2242.one.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.soft2242.one.mybatis.entity.BaseEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 /**
  * @author : Flobby
@@ -15,6 +14,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_user")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserEntity extends BaseEntity {
     /**
      * 用户名
