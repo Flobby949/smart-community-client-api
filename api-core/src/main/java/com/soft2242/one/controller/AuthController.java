@@ -2,6 +2,7 @@ package com.soft2242.one.controller;
 
 import com.soft2242.one.common.utils.Result;
 import com.soft2242.one.service.AuthService;
+import com.soft2242.one.service.service.StorageService;
 import com.soft2242.one.vo.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * @author : Flobby
@@ -24,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class AuthController {
     private final AuthService authService;
-
+    private final StorageService storageService;
 
 
     @PostMapping("login")
@@ -61,6 +65,14 @@ public class AuthController {
     public Result<SysTokenVO> phoneLogin(@RequestBody PhoneLoginVo phoneLoginVo) {
         SysTokenVO token = authService.loginByPhone(phoneLoginVo);
         return Result.ok(token);
+    }
+
+    @PostMapping("upload")
+    @Operation(summary = "上传图片")
+    Result<String> loginByFile(MultipartFile file) throws IOException {
+        String originalFilename = file.getOriginalFilename();
+        String upload = storageService.upload(file.getInputStream(), originalFilename);
+        return Result.ok(upload);
     }
 
 }
