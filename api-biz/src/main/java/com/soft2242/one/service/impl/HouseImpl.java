@@ -83,8 +83,6 @@ public class HouseImpl extends BaseServiceImpl<HouseDao, House> implements House
     public void saveHouse(OwnerEntity owner) {
         owner.setRealName(owner.getRealName());
         owner.setUserId(SecurityUser.getUserId());
-
-        owner.setOwnerId(SecurityUser.getUserId());
         owner.setIdentity(1);
         owner.setState(1);
         ownerDao.insert(owner);

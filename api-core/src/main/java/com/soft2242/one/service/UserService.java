@@ -13,5 +13,8 @@ import com.soft2242.one.mybatis.service.BaseService;
 
 public interface UserService extends BaseService<UserEntity> {
     AccountEntity getUserByPhone(String phone);
+
+     UserEntity getInfoByPhone(String phone);
+
     void updateUserInfo(UserEntity user);
 }

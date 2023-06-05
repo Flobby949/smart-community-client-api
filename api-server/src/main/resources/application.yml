@@ -69,10 +69,10 @@ easy-trans:
 aliyun:
   sms:
     platform: 0
-    signName: ahang666
-    templateId: SMS_460700333
-    accessKey: LTAI5tPABZkxHTWoSkojGJAd
-    secretKey: g6dJysuJh2vuAYfkQAM9TeU3UOPeit
+    signName: FlobbyApp
+    templateId: SMS_206546276
+    accessKey: LTAI5tRU6tDBC2RWtKsvShLZ
+    secretKey: 7Q4sljdCFMLxMpPv7axRoPA3Yglrec
 
 alipay:
   appId: 2016102600763473

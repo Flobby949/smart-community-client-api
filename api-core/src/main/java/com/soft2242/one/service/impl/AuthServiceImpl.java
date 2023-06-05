@@ -15,6 +15,7 @@ import com.soft2242.one.dao.SmsPhoneLogDao;
 import com.soft2242.one.entity.AccountEntity;
 import com.soft2242.one.entity.SmsPhoneEntity;
 import com.soft2242.one.entity.SmsPhoneLogEntity;
+import com.soft2242.one.entity.UserEntity;
 import com.soft2242.one.enums.PlatformEnum;
 import com.soft2242.one.enums.StatusEnum;
 import com.soft2242.one.security.cache.TokenStoreCache;
@@ -56,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
     private final SmsPhoneDao smsPhoneDao;
     private final SmsConfig smsConfig;
     private final SmsPhoneLogDao smsPhoneLogDao;
+
 
     @Override
     public SysTokenVO loginByAccount(AccountLoginVO login) {
@@ -101,13 +103,24 @@ public class AuthServiceImpl implements AuthService {
         AccountEntity user = userService.getUserByPhone(sendPhoneVo.getMobile());
         smsPhone.setPhone(sendPhoneVo.getMobile());
         smsPhone.setPlatform(PlatformEnum.ALIYUN.getCode());
-        if (ObjectUtil.isNull(user)) {
-            smsPhone.setStatus(StatusEnum.FAIL.getCode());
-
-            smsPhone.setError("用户不存在");
-
-            smsPhoneDao.insert(smsPhone);
-            throw new ServerException("用户不存在");
+        Integer type = sendPhoneVo.getType();
+        if (type == 0) {
+            if (ObjectUtil.isNull(user)) {
+                smsPhone.setStatus(StatusEnum.FAIL.getCode());
+                smsPhone.setError("用户不存在");
+                smsPhoneDao.insert(smsPhone);
+                throw new ServerException("用户不存在");
+            }
+        } else if (type == 1) {
+            smsPhoneLogEntity.setPhone(sendPhoneVo.getMobile());
+            smsPhoneLogEntity.setTemplate(smsConfig.getTemplateId());
+            smsPhoneLogEntity.setPlatform(smsConfig.getPlatform());
+            smsPhoneLogEntity.setStatus(0);
+            smsPhoneLogEntity.setIp(IpUtils.getIpAddr(HttpContextUtils.getHttpServletRequest()));
+            smsPhoneLogEntity.setAddress(AddressUtils.getAddressByIP(smsPhoneLogEntity.getIp()));
+//            smsPhoneLogEntity.setUserid(user.getId());
+//            smsPhoneLogEntity.setCreator(user.getId());
+            smsPhoneLogEntity.setDeviceToken(HttpContextUtils.getDeviceToken());
         }
         String code = RandomUtil.randomNumbers(6);
         Map<String, String> map = new HashedMap<String, String>();
@@ -117,27 +130,16 @@ public class AuthServiceImpl implements AuthService {
         } else if (sendPhoneVo.getType() == 1) {
             redisCache.set(Constant.MOBILE_LOGIN + sendPhoneVo.getMobile(), code, 60 * 5);
         }
-        smsPhoneLogEntity.setPhone(sendPhoneVo.getMobile());
-        smsPhoneLogEntity.setTemplate(smsConfig.getTemplateId());
-        smsPhoneLogEntity.setPlatform(smsConfig.getPlatform());
-        smsPhoneLogEntity.setStatus(0);
-        smsPhoneLogEntity.setIp(IpUtils.getIpAddr(HttpContextUtils.getHttpServletRequest()));
-        smsPhoneLogEntity.setAddress(AddressUtils.getAddressByIP(smsPhoneLogEntity.getIp()));
-        smsPhoneLogEntity.setUserid(user.getId());
-        smsPhoneLogEntity.setCreator(user.getId());
-        smsPhoneLogEntity.setDeviceToken(HttpContextUtils.getDeviceToken());
-
         smsPhoneLogDao.insert(smsPhoneLogEntity);
         boolean send = smsService.send(sendPhoneVo.getMobile(), map);
         smsPhone.setStatus(StatusEnum.SUCCESS.getCode());
         smsPhone.setCode(code);
-        smsPhone.setCreator(user.getId());
 
         smsPhoneDao.insert(smsPhone);
         if (send) {
             return true;
         }
-        smsPhoneDao.insert(smsPhone);
+//        smsPhoneDao.insert(smsPhone);
         return false;
     }
 
@@ -171,19 +173,49 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public SysTokenVO loginByPhone(PhoneLoginVo phoneLoginVo) {
         Authentication authentication;
-        try {
-            // 用户认证
-            authentication = authenticationManager.authenticate(
-                    new MobileAuthenticationToken(phoneLoginVo.getMobile(), phoneLoginVo.getCode()));
-        } catch (BadCredentialsException e) {
-            throw new ServerException("手机号或验证码错误");
+        // 手机号登录查不出来就新增用户
+        AccountEntity user = accountDao.getByPhone(phoneLoginVo.getMobile());
+        if (ObjectUtil.isEmpty(user)) {
+            UserEntity account1 = userService.getInfoByPhone(phoneLoginVo.getMobile());
+            if (ObjectUtil.isNotNull(account1)) {
+                throw new ServerException("手机号已存在");
+            }
+            user = new AccountEntity();
+            user.setPhone(phoneLoginVo.getMobile());
+            user.setPayPassword("123456");
+            user.setPassword(passwordEncoder.encode("123456"));
+            userService.save(UserEntity.builder().phone(phoneLoginVo.getMobile()).username(phoneLoginVo.getMobile()).avatar("https://tupian.qqw21.com/article/UploadPic/2021-4/20214222204592237.jpg").build());
+            UserEntity account = userService.getInfoByPhone(phoneLoginVo.getMobile());
+            user.setUserId(account.getId());
+            accountDao.insert(user);
+            // 生成 accessToken
+            String accessToken = TokenUtils.generator();
+            try {
+                // 用户认证
+                authentication = authenticationManager.authenticate(
+                        new MobileAuthenticationToken(phoneLoginVo.getMobile(), phoneLoginVo.getCode()));
+            } catch (BadCredentialsException e) {
+                throw new ServerException("手机号或验证码错误");
+            }
+            UserDetail user3 = (UserDetail) authentication.getPrincipal();
+            // 保存用户信息到缓存，accessToken默认过期时间为24小时
+            tokenStoreCache.saveUser(accessToken, user3);
+            return new SysTokenVO(accessToken);
+        } else {
+            try {
+                // 用户认证
+                authentication = authenticationManager.authenticate(
+                        new MobileAuthenticationToken(phoneLoginVo.getMobile(), phoneLoginVo.getCode()));
+            } catch (BadCredentialsException e) {
+                throw new ServerException("手机号或验证码错误");
+            }
+            // 用户信息
+            UserDetail user1 = (UserDetail) authentication.getPrincipal();
+            // 生成 accessToken
+            String accessToken = TokenUtils.generator();
+            // 保存用户信息到缓存，accessToken默认过期时间为24小时
+            tokenStoreCache.saveUser(accessToken, user1);
+            return new SysTokenVO(accessToken);
         }
-        // 用户信息
-        UserDetail user = (UserDetail) authentication.getPrincipal();
-        // 生成 accessToken
-        String accessToken = TokenUtils.generator();
-        // 保存用户信息到缓存，accessToken默认过期时间为24小时
-        tokenStoreCache.saveUser(accessToken, user);
-        return new SysTokenVO(accessToken);
     }
 }

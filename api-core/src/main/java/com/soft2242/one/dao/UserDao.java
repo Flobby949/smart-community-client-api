@@ -3,6 +3,7 @@ package com.soft2242.one.dao;
 import com.soft2242.one.entity.UserEntity;
 import com.soft2242.one.mybatis.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * @author : Flobby
@@ -13,4 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserDao extends BaseDao<UserEntity> {
+
+    @Select("SELECT * FROM t_user WHERE phone = #{phone}")
+    UserEntity getInfoByPhone(String phone);
 }

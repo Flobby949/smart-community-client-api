@@ -2,14 +2,14 @@ package com.soft2242.one.controller;
 
 import com.soft2242.one.common.utils.Result;
 import com.soft2242.one.service.AuthService;
-import com.soft2242.one.service.service.AliyunStorageService;
-import com.soft2242.one.service.service.StorageService;
 import com.soft2242.one.vo.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author : Flobby
@@ -24,9 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class AuthController {
     private final AuthService authService;
-    private final StorageService storageService;
 
-    private final AliyunStorageService aliyunStorageService;
 
 
     @PostMapping("login")
@@ -65,13 +63,4 @@ public class AuthController {
         return Result.ok(token);
     }
 
-    @PostMapping("/upload")
-    @Operation(summary = "文件上传")
-    public Result<String> upload(@RequestParam("file") MultipartFile file) throws Exception {
-        if (file.isEmpty()) {
-            return Result.error("请选择需要上传的文件");
-        }
-        String url = storageService.upload(file.getBytes(), file.getOriginalFilename());
-        return Result.ok(url);
-    }
 }
