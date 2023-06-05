@@ -33,7 +33,7 @@ public class HouseImpl extends BaseServiceImpl<HouseDao, House> implements House
         // 2.根据业主id查询出房屋id
         // 3.根据房屋id查询出房屋信息
         LambdaQueryWrapper<OwnerEntity> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(OwnerEntity::getOwnerId, userId);
+        wrapper.eq(OwnerEntity::getUserId, userId);
         List<OwnerEntity> ownerEntityList = ownerDao.selectList(wrapper);
         if (ownerEntityList.size() == 0) {
             return null;
