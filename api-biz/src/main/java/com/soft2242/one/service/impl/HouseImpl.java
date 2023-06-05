@@ -1,6 +1,7 @@
 package com.soft2242.one.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.soft2242.one.convert.HouseConvert;
 import com.soft2242.one.dao.HouseDao;
 import com.soft2242.one.dao.OwnerDao;
 import com.soft2242.one.entity.House;
@@ -8,6 +9,7 @@ import com.soft2242.one.entity.OwnerEntity;
 import com.soft2242.one.mybatis.service.impl.BaseServiceImpl;
 import com.soft2242.one.security.user.SecurityUser;
 import com.soft2242.one.service.HouseService;
+import com.soft2242.one.vo.HouseVO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,22 +30,23 @@ public class HouseImpl extends BaseServiceImpl<HouseDao, House> implements House
     private final OwnerDao ownerDao;
 
     @Override
-    public List<House> myHouse(Long userId) {
+    public List<HouseVO> myHouse(Long userId, Integer status) {
         // 1.根据用户id去业主表查询业主id
         // 2.根据业主id查询出房屋id
         // 3.根据房屋id查询出房屋信息
         LambdaQueryWrapper<OwnerEntity> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(OwnerEntity::getUserId, userId);
+        wrapper.eq(status != null, OwnerEntity::getState, status);
         List<OwnerEntity> ownerEntityList = ownerDao.selectList(wrapper);
-        if (ownerEntityList.size() == 0) {
+        if (ownerEntityList.isEmpty()) {
             return null;
         } else {
-            List<Long> longList = ownerEntityList.stream().map(item -> item.getHouseId()).collect(Collectors.toList());
-            LambdaQueryWrapper<House> wrapper1 = new LambdaQueryWrapper<>();
-            wrapper1.in(House::getId, longList);
-            List<House> houseList = baseMapper.selectList(wrapper1);
-            houseList.forEach(item -> item.setIsOwner(1));
-            return houseList;
+            return ownerEntityList.stream().map(item -> {
+                House house = baseMapper.selectById(item.getHouseId());
+                HouseVO vo = HouseConvert.INSTANCE.convert(house);
+                vo.setOwnerId(item.getId());
+                return vo;
+            }).toList();
         }
     }
 

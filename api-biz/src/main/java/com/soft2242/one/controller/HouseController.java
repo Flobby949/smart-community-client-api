@@ -5,13 +5,11 @@ import com.soft2242.one.entity.House;
 import com.soft2242.one.entity.OwnerEntity;
 import com.soft2242.one.security.user.SecurityUser;
 import com.soft2242.one.service.HouseService;
+import com.soft2242.one.vo.HouseVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,10 +29,9 @@ public class HouseController {
     //    查询当前登录用户的房屋信息
     @PostMapping("/myHouse")
     @Operation(summary = "查询当前登录用户的房屋信息")
-    public Result<List<House>> myHouse() {
+    public Result<List<HouseVO>> myHouse(@RequestParam(required = false) Integer status) {
         Long userId = SecurityUser.getUserId();
-        List<House> list = houseService.myHouse(userId);
-        return Result.ok(list);
+        return Result.ok(houseService.myHouse(userId, status));
     }
 
     // 删除房屋

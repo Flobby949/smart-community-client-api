@@ -3,6 +3,7 @@ package com.soft2242.one.service;
 import com.soft2242.one.entity.House;
 import com.soft2242.one.entity.OwnerEntity;
 import com.soft2242.one.mybatis.service.BaseService;
+import com.soft2242.one.vo.HouseVO;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  **/
 
 public interface HouseService extends BaseService<House> {
-    List<House> myHouse(Long userId);
+    List<HouseVO> myHouse(Long userId, Integer status);
 
     void deleteHouse(Long userId,String houseId);
 
