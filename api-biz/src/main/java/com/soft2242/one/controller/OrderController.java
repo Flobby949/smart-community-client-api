@@ -1,36 +1,34 @@
 package com.soft2242.one.controller;
 
 
-import com.alipay.api.domain.AlipayEcoRenthouseKaServiceCreateModel;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.soft2242.one.common.utils.PageResult;
 import com.soft2242.one.common.utils.Result;
 import com.soft2242.one.convert.OrderConvert;
 import com.soft2242.one.entity.Order;
+import com.soft2242.one.entity.OwnerEntity;
 import com.soft2242.one.query.OrderQuery;
 import com.soft2242.one.service.CommunityService;
 import com.soft2242.one.service.HouseService;
 import com.soft2242.one.service.IOrderService;
+import com.soft2242.one.service.OwnerService;
 import com.soft2242.one.vo.OrderVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jdk.dynalink.linker.LinkerServices;
 import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.PipedReader;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
- * <p>
- *  前端控制器
- * </p>
- *
  * @author ysh
  * @since 2023-05-25
  */
@@ -44,6 +42,8 @@ public class OrderController {
     private final IOrderService orderSevice;
     private final CommunityService communityService;
     private final HouseService houseService;
+    private final OwnerService ownerService;
+
 
     @GetMapping("page")
     @Operation(summary = "分页查询")
@@ -74,13 +74,42 @@ public class OrderController {
         return Result.ok();
     }
 
+
     @GetMapping("listById")
     @Operation(summary = "用户id查询订单列表")
-    public Result<List<OrderVO>> listById(@Parameter Long  id,@Parameter Integer status) {
-        List<OrderVO> list = orderSevice.listById(Wrappers.lambdaQuery(Order.class)
-                .eq(Order::getUserId, id)
-                .eq(Order::getStatus,status));
-//        插入社区名和房屋信息
-        return Result.ok(list);
+    public Result<List<OrderVO>> listById(@Parameter Long id, @Parameter Integer status) {
+        LambdaQueryWrapper<OwnerEntity> ownerWrapper = Wrappers.lambdaQuery();
+        List<OrderVO> list = new ArrayList<>();
+        final List<OrderVO> listByOwnerId = new ArrayList<>();
+
+        LambdaQueryWrapper<Order> ordersMapper = Wrappers.lambdaQuery(Order.class);
+
+        ordersMapper.eq(Order::getStatus, status).eq(Order::getUserId, id);//根据用户id查询
+
+//        list = orderSevice.listById(ordersMapper);
+
+        List<OwnerEntity> ownerList = ownerService.list(ownerWrapper.eq(OwnerEntity::getUserId, id));//获取业主该userid的业主列表
+//        一个用户可能存在多个房屋
+        if (ownerList != null) {
+            ownerList.forEach(o -> {    //  遍历添加
+                if (o.getHouseId() != null) {
+                    listByOwnerId.addAll(
+                            OrderConvert.INSTANCE.convertList(orderSevice.list(Wrappers.lambdaQuery(Order.class)
+                                            .eq(Order::getStatus, status)
+                                            .eq(Order::getHouseId, o.getHouseId()))));
+                }
+            });
+        }
+
+        list.addAll(listByOwnerId);
+        System.out.println(list);
+//        去除重复
+        Set<OrderVO> reList = new HashSet<>(list);
+
+        if (reList.size() == 0) {
+            return Result.error("您没有账单信息!");
+        } else {
+            return Result.ok(orderSevice.changeVO(new ArrayList<>(reList)));
+        }
     }
 }
