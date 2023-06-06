@@ -19,8 +19,8 @@ import java.util.List;
 @Service
 public class OwnerServiceImpl extends BaseServiceImpl<OwnerDao, OwnerEntity> implements OwnerService {
     @Override
-    public List<MyHouseListVo> findMyHouseById(Long userId) {
-        return baseMapper.findMyHouseById(userId);
+    public List<MyHouseListVo> findMyHouseById(Long userId,Integer identity) {
+        return baseMapper.findMyHouseById(userId,identity);
     }
 
     @Override

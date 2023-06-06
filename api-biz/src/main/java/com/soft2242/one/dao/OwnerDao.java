@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Mapper
 public interface OwnerDao extends BaseDao<OwnerEntity> {
-    List<MyHouseListVo> findMyHouseById(Long userId);
+    List<MyHouseListVo> findMyHouseById(@Param("userId") Long userId,@Param("identity") Integer identity);
     List<MyFamilyVo> findFamily(Long houseId);
     int deleteFamily(@Param("id") Long id,@Param("userId") Long userId);
     List<HouseOptionsVo> findHouseOptions();

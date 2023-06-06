@@ -8,6 +8,7 @@ import com.soft2242.one.entity.UserEntity;
 import com.soft2242.one.security.user.SecurityUser;
 import com.soft2242.one.service.OwnerService;
 import com.soft2242.one.service.UserService;
+import com.soft2242.one.service.service.StorageService;
 import com.soft2242.one.vo.HouseOptionsVo;
 import com.soft2242.one.vo.MyFamilyVo;
 import com.soft2242.one.vo.MyHouseListVo;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,11 +34,13 @@ import java.util.List;
 public class OwnerController {
     private final OwnerService ownerService;
     private final UserService userService;
+    private final StorageService storageService;
 
     @PostMapping("findMyHouseList")
     @Operation(summary ="名下房屋列表")
-    public Result<List<MyHouseListVo>> findMyHouseList(){
-        List<MyHouseListVo> list = ownerService.findMyHouseById(SecurityUser.getUserId());
+    public Result<List<MyHouseListVo>> findMyHouseList(Integer identity){
+        System.out.println(identity);
+        List<MyHouseListVo> list = ownerService.findMyHouseById(SecurityUser.getUserId(),identity);
         return Result.ok(list);
     }
     @PostMapping("findFamily")
