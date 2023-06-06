@@ -115,7 +115,7 @@ public class VisitorController {
                     .eq(OwnerEntity::getState, 1)
                     .eq(OwnerEntity::getDeleted, 0);
             list = ownerService.list(query);
-            ownerId = list.get(0).getOwnerId();
+            ownerId = list.get(0).getId();
             houseId = list.get(0).getHouseId();
         } catch (Exception e) {
             e.printStackTrace();
@@ -154,6 +154,7 @@ public class VisitorController {
         visitorInvitationService.updateById(entity);
         return Result.ok("使访客失效成功");
     }
+
     @GetMapping("gateOpenHistoryList/{userId}")
     @Operation(summary = "访客开门列表")
     public Result<List<VisitorVO>> getGateOpenHistoryByUserId(@PathVariable Long userId) {
@@ -166,7 +167,7 @@ public class VisitorController {
                     .eq(OwnerEntity::getState, 1)
                     .eq(OwnerEntity::getDeleted, 0);
             list = ownerService.list(ownerWrapper);
-            ownerId = list.get(0).getOwnerId();
+            ownerId = list.get(0).getId();
             houseId = list.get(0).getHouseId();
         } catch (Exception e) {
             e.printStackTrace();

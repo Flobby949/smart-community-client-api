@@ -138,4 +138,7 @@ public class OrderVO implements Serializable {
 
     @Schema(description = "单元号")
     private Integer units;
+
+    @Schema(description = "订单编号")
+    private String orderNumber;
 }
