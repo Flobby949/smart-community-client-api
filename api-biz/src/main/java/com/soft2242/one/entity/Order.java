@@ -124,5 +124,4 @@ public class Order implements Serializable {
 
     private String orderNumber;
 
-    private String orderNumber;
 }
