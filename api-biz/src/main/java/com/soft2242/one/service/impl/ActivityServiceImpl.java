@@ -60,4 +60,11 @@ public class ActivityServiceImpl extends BaseServiceImpl<ActivityDao, Activity> 
         removeByIds(idList);
     }
 
+    private final ActivityDao activityDao;
+    @Override
+    public Activity info(Long communityId) {
+        Activity entity = activityDao.getInfo(communityId);
+        return entity;
+    }
+
 }

@@ -50,7 +50,7 @@ public class CarportServiceImpl extends BaseServiceImpl<CarportDao, Carport> imp
         //先根据用户姓名和手机号查出ownerid
         Long ownerId = baseMapper.getOwnerId(vo.getRealName(),vo.getPhone());
         if(ownerId==null){
-            throw new ServerException("用户不存在");
+            throw new ServerException("你不是业主");
         }
         vo.setOwnerId(ownerId);
 

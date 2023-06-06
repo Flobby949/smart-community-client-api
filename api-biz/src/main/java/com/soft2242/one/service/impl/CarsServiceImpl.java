@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.soft2242.one.convert.CarportConvert;
 import com.soft2242.one.convert.CarsConvert;
+import com.soft2242.one.dao.ActivityDao;
 import com.soft2242.one.dao.CarportDao;
 import com.soft2242.one.dao.CarsDao;
 import com.soft2242.one.entity.Carport;
@@ -27,6 +28,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CarsServiceImpl extends BaseServiceImpl<CarsDao, Cars> implements CarsService {
     private final CarsDao carsDao;
+    private final ActivityDao activityDao;
     @Override
     public List<Cars> myCar(Long userId) {
         LambdaQueryWrapper<Cars> queryWrapper = new LambdaQueryWrapper<>();

@@ -3,6 +3,7 @@ package com.soft2242.one.dao;
 
 import com.soft2242.one.entity.Activity;
 import com.soft2242.one.mybatis.dao.BaseDao;
+import com.soft2242.one.vo.ActivityVO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -13,5 +14,6 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface ActivityDao extends BaseDao<Activity> {
+    Activity getInfo(Long communityId);
 	
 }
