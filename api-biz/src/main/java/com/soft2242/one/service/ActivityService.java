@@ -25,5 +25,5 @@ public interface ActivityService extends BaseService<Activity> {
 
     void delete(List<Long> idList);
 
-    Activity info(Long communityId);
+    List<Activity> info(Long communityId);
 }
