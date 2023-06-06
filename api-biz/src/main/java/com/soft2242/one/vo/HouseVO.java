@@ -62,4 +62,6 @@ public class HouseVO {
     private Integer isOwner;
 
     private Long ownerId;
+
+    private Integer state;
 }

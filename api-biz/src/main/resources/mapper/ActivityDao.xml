@@ -24,5 +24,8 @@
         <result property="updater" column="updater"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
+    <select id="getInfo" resultType="com.soft2242.one.entity.Activity">
+        SELECT * FROM t_activity t1 WHERE t1.deleted = 0 AND community_id = #{communityId}
+    </select>
 
 </mapper>
