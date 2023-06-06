@@ -58,13 +58,13 @@ public class ActivityController {
         return Result.ok(page);
     }
 
-    @GetMapping("list")
+    @GetMapping("list/{communityId}")
     @Operation(summary = "活动列表")
 //    @PreAuthorize("hasAuthority('soft2242:activity:page')")
-    public Result<List<ActivityVO>> list() {
+    public Result<List<ActivityVO>> list(@PathVariable Long communityId) {
 //        PageResult<ActivityVO> page = activityService.page(new ActivityQuery())
         LambdaQueryWrapper<Activity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(Activity::getDeleted,0).eq(Activity::getStatus,0);
+        wrapper.eq(Activity::getDeleted,0).eq(Activity::getStatus,0).eq(Activity::getCommunityId,communityId);
         List<Activity> list = activityService.list(wrapper);
         List<ActivityVO> activityVOS = ActivityConvert.INSTANCE.convertList(list);
 //        配置
