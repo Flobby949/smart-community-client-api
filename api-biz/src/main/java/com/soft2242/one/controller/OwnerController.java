@@ -8,7 +8,6 @@ import com.soft2242.one.entity.UserEntity;
 import com.soft2242.one.security.user.SecurityUser;
 import com.soft2242.one.service.OwnerService;
 import com.soft2242.one.service.UserService;
-import com.soft2242.one.service.service.StorageService;
 import com.soft2242.one.vo.HouseOptionsVo;
 import com.soft2242.one.vo.MyFamilyVo;
 import com.soft2242.one.vo.MyHouseListVo;
@@ -18,7 +17,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -34,7 +32,6 @@ import java.util.List;
 public class OwnerController {
     private final OwnerService ownerService;
     private final UserService userService;
-    private final StorageService storageService;
 
     @PostMapping("findMyHouseList")
     @Operation(summary ="名下房屋列表")
@@ -79,25 +76,39 @@ public class OwnerController {
         List<HouseOptionsVo> list = ownerService.findHouseOptions();
         return Result.ok(list);
     }
+    @PostMapping("defaultInfo")
+    @Operation(summary = "获取认证默认信息")
+    private Result<OwnerEntity> defaultInfo(){
+        QueryWrapper<OwnerEntity> ownerWrapper = new QueryWrapper<>();
+        ownerWrapper.lambda().select(OwnerEntity::getIdentityCard,OwnerEntity::getEContacts).eq(OwnerEntity::getUserId,SecurityUser.getUserId()).eq(OwnerEntity::getState,1).last("LIMIT 1");
+        OwnerEntity owner = ownerService.getOne(ownerWrapper);
+        return Result.ok(owner);
+    }
     @PostMapping("sbCertify")
     @Operation(summary = "业主提交认证信息")
     private Result<String> sbCertify(@RequestBody OwnerInfoVo ownerInfoVo){
         QueryWrapper<OwnerEntity> ownerWrapper = new QueryWrapper<>();
         ownerWrapper.lambda().eq(OwnerEntity::getState,0).eq(OwnerEntity::getUserId,SecurityUser.getUserId());
         if(ownerService.count(ownerWrapper)==0){
-            OwnerEntity owner = OwnerEntity.builder().userId(SecurityUser.getUserId()).houseId(ownerInfoVo.getHouseId())
-                    .realName(ownerInfoVo.getRealName()).phone(ownerInfoVo.getPhone()).identityCard(ownerInfoVo.getIdentityCard()).eContacts(ownerInfoVo.getEc())
-                    .identity(0).gender(ownerInfoVo.getGender()).build();
-            ownerService.save(owner);
-            UpdateWrapper<UserEntity> wrapper = new UpdateWrapper<>();
-            wrapper.lambda().set(UserEntity::getGender,ownerInfoVo.getGender()).set(UserEntity::getRealName,ownerInfoVo.getRealName())
-                    .set(UserEntity::getBirthday,ownerInfoVo.getBirthday()).set(UserEntity::getNation,ownerInfoVo.getNation())
-                    .set(UserEntity::getMarriage,ownerInfoVo.getMarriage()).set(UserEntity::getAccountType,ownerInfoVo.getAccountType())
-                    .set(UserEntity::getParty,ownerInfoVo.getParty()).set(UserEntity::getDomicileLocation,ownerInfoVo.getDomicileLocation())
-                    .set(UserEntity::getRentalType,ownerInfoVo.getRentalType()).set(StringUtils.isNotEmpty(ownerInfoVo.getStayCard()),UserEntity::getStayCard,ownerInfoVo.getStayCard())
-                    .set(UserEntity::getAddress,ownerInfoVo.getAddress()).eq(UserEntity::getId,SecurityUser.getUserId());
-            userService.update(new UserEntity(),wrapper);
-            return Result.ok();
+            QueryWrapper<OwnerEntity> ownerWrapper2 = new QueryWrapper<>();
+            ownerWrapper2.lambda().eq(OwnerEntity::getHouseId,ownerInfoVo.getHouseId()).eq(OwnerEntity::getState,1);
+            if(ownerService.count(ownerWrapper2)==0){
+                OwnerEntity owner = OwnerEntity.builder().userId(SecurityUser.getUserId()).houseId(ownerInfoVo.getHouseId())
+                        .realName(ownerInfoVo.getRealName()).phone(ownerInfoVo.getPhone()).identityCard(ownerInfoVo.getIdentityCard()).eContacts(ownerInfoVo.getEc())
+                        .identity(0).gender(ownerInfoVo.getGender()).build();
+                ownerService.save(owner);
+                UpdateWrapper<UserEntity> wrapper = new UpdateWrapper<>();
+                wrapper.lambda().set(UserEntity::getGender,ownerInfoVo.getGender()).set(UserEntity::getRealName,ownerInfoVo.getRealName())
+                        .set(UserEntity::getBirthday,ownerInfoVo.getBirthday()).set(UserEntity::getNation,ownerInfoVo.getNation())
+                        .set(UserEntity::getMarriage,ownerInfoVo.getMarriage()).set(UserEntity::getAccountType,ownerInfoVo.getAccountType())
+                        .set(UserEntity::getParty,ownerInfoVo.getParty()).set(UserEntity::getDomicileLocation,ownerInfoVo.getDomicileLocation())
+                        .set(UserEntity::getRentalType,ownerInfoVo.getRentalType()).set(StringUtils.isNotEmpty(ownerInfoVo.getStayCard()),UserEntity::getStayCard,ownerInfoVo.getStayCard())
+                        .set(UserEntity::getAddress,ownerInfoVo.getAddress()).eq(UserEntity::getId,SecurityUser.getUserId());
+                userService.update(new UserEntity(),wrapper);
+                return Result.ok();
+            }else{
+                return Result.error(2,"提交失败！该房屋已被认证");
+            }
         }else {
             return Result.error(0,"提交失败！存在尚未审核的认证,请耐心等待");
         }
