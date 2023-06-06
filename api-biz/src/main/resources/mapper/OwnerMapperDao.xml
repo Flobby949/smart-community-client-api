@@ -20,7 +20,11 @@
         SELECT building_name as name,id,community_id from t_building where community_id=#{id}
     </select>
     <select id="findMyHouseById" resultType="com.soft2242.one.vo.MyHouseListVo">
-        SELECT CONCAT(b.community_name,b.building_name,b.units,'单元',b.house_number) as name ,a.house_id FROM t_owner a,t_house b where a.user_id=#{userId} and a.identity=0 and a.state=1 and a.deleted=0 and a.house_id=b.id order by default_address desc
+        SELECT CONCAT(b.community_name,b.building_name,b.units,'单元',b.house_number) as name ,a.house_id FROM t_owner a,t_house b where a.user_id=#{userId}
+                                                                                                                                    <if test="identity!=null">
+                                                                                                                                        and a.identity=#{identity}
+                                                                                                                                    </if>
+                                                                                                                                   and a.state=1 and a.deleted=0 and a.house_id=b.id order by default_address desc
     </select>
     <select id="selectUserByPhone" parameterType="string" resultType="string">
         SELECT COALESCE((SELECT '已注册' FROM t_user WHERE phone = #{phone}), '未注册') AS isRegister

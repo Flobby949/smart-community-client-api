@@ -14,7 +14,7 @@ import java.util.List;
  * @Date: 2023/05/25/13:31
  */
 public interface OwnerService extends BaseService<OwnerEntity> {
-    List<MyHouseListVo> findMyHouseById(Long userId);
+    List<MyHouseListVo> findMyHouseById(Long userId,Integer identity);
     List<MyFamilyVo> findFamily(Long houseId);
     boolean deleteFamily (Long id,Long userId);
     List<HouseOptionsVo> findHouseOptions();

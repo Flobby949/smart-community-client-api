@@ -86,3 +86,8 @@ wx:
     appId: wxd898fcb01713c658
     appSecret: 0b1e8e1b040b4e8c2e2b2e1a905c1d1c
     redirectUrl: http://muaqx9.natappfree.cc/sell/wechat/authorize
+logging:
+  level:
+    com:
+      soft2242: debug
+debug: true
