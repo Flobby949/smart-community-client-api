@@ -46,8 +46,8 @@ public class CarsController {
     private final ActivityService activityService;
     @GetMapping("{communityId}")
     @Operation(summary = "根据社区id查找活动")
-    public Result<Activity> info(@PathVariable("communityId")Long communityId){
-        Activity info = activityService.info(communityId);
+    public Result<List<Activity>> info(@PathVariable("communityId")Long communityId){
+        List<Activity> info = activityService.info(communityId);
         return Result.ok(info);
     }
 }
