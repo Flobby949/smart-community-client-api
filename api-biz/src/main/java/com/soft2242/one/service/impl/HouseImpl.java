@@ -44,7 +44,8 @@ public class HouseImpl extends BaseServiceImpl<HouseDao, House> implements House
             return ownerEntityList.stream().map(item -> {
                 House house = baseMapper.selectById(item.getHouseId());
                 HouseVO vo = HouseConvert.INSTANCE.convert(house);
-                vo.setOwnerId(item.getId());
+                vo.setOwnerId((long) Integer.parseInt(item.getDefaultAddress().toString()));
+                vo.setState(item.getState());
                 return vo;
             }).toList();
         }
@@ -53,7 +54,7 @@ public class HouseImpl extends BaseServiceImpl<HouseDao, House> implements House
     @Override
     public void deleteHouse(Long userId, String houseId) {
         LambdaQueryWrapper<OwnerEntity> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(OwnerEntity::getOwnerId, userId);
+        wrapper.eq(OwnerEntity::getUserId, userId);
         wrapper.eq(OwnerEntity::getHouseId, houseId);
         ownerDao.delete(wrapper);
     }
@@ -62,7 +63,19 @@ public class HouseImpl extends BaseServiceImpl<HouseDao, House> implements House
     public List<House> allBuilding(String communityId) {
         LambdaQueryWrapper<House> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(House::getCommunityId, communityId);
-        return baseMapper.selectList(wrapper);
+        // 过滤掉我已经绑定的房屋
+        List<House> houseList = baseMapper.selectList(wrapper);
+        List<Long> longList = houseList.stream().map(item -> item.getId()).collect(Collectors.toList());
+        LambdaQueryWrapper<OwnerEntity> wrapper1 = new LambdaQueryWrapper<>();
+        // 查询出我已经绑定的房屋
+        wrapper1.in(OwnerEntity::getHouseId, longList);
+        List<OwnerEntity> ownerEntityList = ownerDao.selectList(wrapper1);
+        // 过滤掉我已经绑定的房屋
+        List<Long> longList1 = ownerEntityList.stream().map(item -> item.getHouseId()).collect(Collectors.toList());
+        wrapper.notIn(House::getId, longList1);
+        // 返回房屋信息
+        List<House> houses = baseMapper.selectList(wrapper);
+        return houses;
     }
 
     @Override
@@ -70,7 +83,19 @@ public class HouseImpl extends BaseServiceImpl<HouseDao, House> implements House
         LambdaQueryWrapper<House> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(House::getBuildingId, buildingId);
         wrapper.eq(House::getCommunityId, communityId);
-        return baseMapper.selectList(wrapper);
+        // 过滤掉我已经绑定的房屋
+        List<House> houseList = baseMapper.selectList(wrapper);
+        List<Long> longList = houseList.stream().map(item -> item.getId()).collect(Collectors.toList());
+        LambdaQueryWrapper<OwnerEntity> wrapper1 = new LambdaQueryWrapper<>();
+        // 查询出我已经绑定的房屋
+        wrapper1.in(OwnerEntity::getHouseId, longList);
+        List<OwnerEntity> ownerEntityList = ownerDao.selectList(wrapper1);
+        // 过滤掉我已经绑定的房屋
+        List<Long> longList1 = ownerEntityList.stream().map(item -> item.getHouseId()).collect(Collectors.toList());
+        wrapper.notIn(House::getId, longList1);
+        // 返回房屋信息
+        List<House> houses = baseMapper.selectList(wrapper);
+        return houses;
     }
 
     @Override
@@ -79,7 +104,19 @@ public class HouseImpl extends BaseServiceImpl<HouseDao, House> implements House
         wrapper.eq(House::getBuildingId, buildingId);
         wrapper.eq(House::getCommunityId, communityId);
         wrapper.eq(House::getUnits, unit);
-        return baseMapper.selectList(wrapper);
+        // 过滤掉我已经绑定的房屋
+        List<House> houseList = baseMapper.selectList(wrapper);
+        List<Long> longList = houseList.stream().map(item -> item.getId()).collect(Collectors.toList());
+        LambdaQueryWrapper<OwnerEntity> wrapper1 = new LambdaQueryWrapper<>();
+        // 查询出我已经绑定的房屋
+        wrapper1.in(OwnerEntity::getHouseId, longList);
+        List<OwnerEntity> ownerEntityList = ownerDao.selectList(wrapper1);
+        // 过滤掉我已经绑定的房屋
+        List<Long> longList1 = ownerEntityList.stream().map(item -> item.getHouseId()).collect(Collectors.toList());
+        wrapper.notIn(House::getId, longList1);
+        // 返回房屋信息
+        List<House> houses = baseMapper.selectList(wrapper);
+        return houses;
     }
 
     @Override
@@ -87,7 +124,7 @@ public class HouseImpl extends BaseServiceImpl<HouseDao, House> implements House
         owner.setRealName(owner.getRealName());
         owner.setUserId(SecurityUser.getUserId());
         owner.setIdentity(1);
-        owner.setState(1);
+        owner.setState(0);
         ownerDao.insert(owner);
     }
 
