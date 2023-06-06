@@ -33,5 +33,6 @@ public interface IOrderService extends BaseService<Order> {
 
     List<OrderVO> listById(LambdaQueryWrapper<Order> eq);
     OrderVO getByOrderId(Long id);
+    List<OrderVO>  changeVO(List<OrderVO> orderVOS);
 
 }
