@@ -39,7 +39,6 @@ public class OwnerController {
     @PostMapping("findMyHouseList")
     @Operation(summary ="名下房屋列表")
     public Result<List<MyHouseListVo>> findMyHouseList(Integer identity){
-        System.out.println(identity);
         List<MyHouseListVo> list = ownerService.findMyHouseById(SecurityUser.getUserId(),identity);
         return Result.ok(list);
     }
@@ -83,18 +82,24 @@ public class OwnerController {
     @PostMapping("sbCertify")
     @Operation(summary = "业主提交认证信息")
     private Result<String> sbCertify(@RequestBody OwnerInfoVo ownerInfoVo){
-        OwnerEntity owner = OwnerEntity.builder().userId(SecurityUser.getUserId()).houseId(ownerInfoVo.getHouseId())
-                .realName(ownerInfoVo.getRealName()).phone(ownerInfoVo.getPhone()).identityCard(ownerInfoVo.getIdentityCard()).eContacts(ownerInfoVo.getEc())
-                .identity(0).gender(ownerInfoVo.getGender()).build();
-        ownerService.save(owner);
-        UpdateWrapper<UserEntity> wrapper = new UpdateWrapper<>();
-        wrapper.lambda().set(UserEntity::getGender,ownerInfoVo.getGender()).set(UserEntity::getRealName,ownerInfoVo.getRealName())
-                .set(UserEntity::getBirthday,ownerInfoVo.getBirthday()).set(UserEntity::getNation,ownerInfoVo.getNation())
-                .set(UserEntity::getMarriage,ownerInfoVo.getMarriage()).set(UserEntity::getAccountType,ownerInfoVo.getAccountType())
-                .set(UserEntity::getParty,ownerInfoVo.getParty()).set(UserEntity::getDomicileLocation,ownerInfoVo.getDomicileLocation())
-                .set(UserEntity::getRentalType,ownerInfoVo.getRentalType()).set(StringUtils.isNotEmpty(ownerInfoVo.getStayCard()),UserEntity::getStayCard,ownerInfoVo.getStayCard())
-                .set(UserEntity::getAddress,ownerInfoVo.getAddress()).eq(UserEntity::getId,SecurityUser.getUserId());
-        userService.update(new UserEntity(),wrapper);
-        return Result.ok();
+        QueryWrapper<OwnerEntity> ownerWrapper = new QueryWrapper<>();
+        ownerWrapper.lambda().eq(OwnerEntity::getState,0).eq(OwnerEntity::getUserId,SecurityUser.getUserId());
+        if(ownerService.count(ownerWrapper)==0){
+            OwnerEntity owner = OwnerEntity.builder().userId(SecurityUser.getUserId()).houseId(ownerInfoVo.getHouseId())
+                    .realName(ownerInfoVo.getRealName()).phone(ownerInfoVo.getPhone()).identityCard(ownerInfoVo.getIdentityCard()).eContacts(ownerInfoVo.getEc())
+                    .identity(0).gender(ownerInfoVo.getGender()).build();
+            ownerService.save(owner);
+            UpdateWrapper<UserEntity> wrapper = new UpdateWrapper<>();
+            wrapper.lambda().set(UserEntity::getGender,ownerInfoVo.getGender()).set(UserEntity::getRealName,ownerInfoVo.getRealName())
+                    .set(UserEntity::getBirthday,ownerInfoVo.getBirthday()).set(UserEntity::getNation,ownerInfoVo.getNation())
+                    .set(UserEntity::getMarriage,ownerInfoVo.getMarriage()).set(UserEntity::getAccountType,ownerInfoVo.getAccountType())
+                    .set(UserEntity::getParty,ownerInfoVo.getParty()).set(UserEntity::getDomicileLocation,ownerInfoVo.getDomicileLocation())
+                    .set(UserEntity::getRentalType,ownerInfoVo.getRentalType()).set(StringUtils.isNotEmpty(ownerInfoVo.getStayCard()),UserEntity::getStayCard,ownerInfoVo.getStayCard())
+                    .set(UserEntity::getAddress,ownerInfoVo.getAddress()).eq(UserEntity::getId,SecurityUser.getUserId());
+            userService.update(new UserEntity(),wrapper);
+            return Result.ok();
+        }else {
+            return Result.error(0,"提交失败！存在尚未审核的认证,请耐心等待");
+        }
     }
 }
