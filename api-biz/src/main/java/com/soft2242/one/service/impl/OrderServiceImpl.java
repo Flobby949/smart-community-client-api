@@ -58,7 +58,8 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         return name;
     }
 
-    private List<OrderVO> changeVO(List<OrderVO> orderVOS) {
+    @Override
+     public List<OrderVO> changeVO(List<OrderVO> orderVOS) {
         DecimalFormat df = new DecimalFormat("#.00");
         orderVOS.forEach(orderVO -> {
             House house = houseService.getById(orderVO.getHouseId());

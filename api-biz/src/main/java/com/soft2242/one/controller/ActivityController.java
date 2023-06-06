@@ -64,6 +64,7 @@ public class ActivityController {
     public Result<List<ActivityVO>> list() {
 //        PageResult<ActivityVO> page = activityService.page(new ActivityQuery())
         LambdaQueryWrapper<Activity> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(Activity::getDeleted,0).eq(Activity::getStatus,0);
         List<Activity> list = activityService.list(wrapper);
         List<ActivityVO> activityVOS = ActivityConvert.INSTANCE.convertList(list);
 //        配置
