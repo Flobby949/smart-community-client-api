@@ -70,8 +70,8 @@ public class RepairController {
     public Result<String> save(@RequestBody RepairVO vo) {
         UserDetail user = getUser();
         vo.setUserId(user.getId());
+        vo.setUserType("0");
         repairService.save(vo);
-
         return Result.ok();
     }
 

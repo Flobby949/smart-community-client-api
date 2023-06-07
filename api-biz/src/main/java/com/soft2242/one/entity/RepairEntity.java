@@ -13,9 +13,10 @@ import java.util.Date;
 
 /**
  * 报修表
+ *
  * @TableName t_repair
  */
-@TableName(value ="t_repair")
+@TableName(value = "t_repair")
 @Data
 public class RepairEntity extends BaseEntity {
     /**
@@ -24,6 +25,10 @@ public class RepairEntity extends BaseEntity {
     @TableId(type = IdType.AUTO)
     private Long id;
 
+    /**
+     * 用户类型 0代表用户 1代表管理员
+     */
+    private String userType;
     /**
      * 社区id
      */
