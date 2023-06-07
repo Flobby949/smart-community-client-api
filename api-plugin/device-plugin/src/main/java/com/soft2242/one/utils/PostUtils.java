@@ -329,7 +329,7 @@ public class PostUtils {
         return result;
     }
 
-    public static String sendPutWithToken(String url, String token, AbstractHttpEntity requestBody) {
+    public static String sendPutWithToken(String url, String token, String requestBody) {
         CloseableHttpClient httpClient = null;
         CloseableHttpResponse response = null;
         String result = "";
@@ -347,7 +347,7 @@ public class PostUtils {
             httpPut.addHeader("Content-type", "application/json");
             httpPut.setHeader("Accept", "application/json");
             httpPut.addHeader("accessToken", token);
-            httpPut.setEntity(requestBody);
+            httpPut.setEntity(new StringEntity(requestBody));
             response = httpClient.execute(httpPut);
             in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             StringBuffer sb = new StringBuffer("");

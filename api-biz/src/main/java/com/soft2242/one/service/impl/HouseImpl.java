@@ -12,6 +12,7 @@ import com.soft2242.one.service.HouseService;
 import com.soft2242.one.vo.HouseVO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,9 +43,14 @@ public class HouseImpl extends BaseServiceImpl<HouseDao, House> implements House
             return null;
         } else {
             return ownerEntityList.stream().map(item -> {
+                if (ObjectUtils.isEmpty(item)) {
+                    return new HouseVO();
+                }
                 House house = baseMapper.selectById(item.getHouseId());
+                log.info("" + house);
                 HouseVO vo = HouseConvert.INSTANCE.convert(house);
-                vo.setOwnerId((long) Integer.parseInt(item.getDefaultAddress().toString()));
+                log.info("" + vo);
+                vo.setOwnerId(item.getId());
                 vo.setState(item.getState());
                 return vo;
             }).toList();
@@ -123,7 +129,7 @@ public class HouseImpl extends BaseServiceImpl<HouseDao, House> implements House
     public void saveHouse(OwnerEntity owner) {
         owner.setRealName(owner.getRealName());
         owner.setUserId(SecurityUser.getUserId());
-        owner.setIdentity(1);
+        owner.setIdentity(0);
         owner.setState(0);
         ownerDao.insert(owner);
     }
