@@ -3,7 +3,6 @@ package com.soft2242.one.utils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.soft2242.one.constant.OpenConstant;
-import com.soft2242.one.entity.BooleanEntity;
 import com.soft2242.one.entity.DeviceResponse;
 import com.soft2242.one.entity.OpenAccessToken;
 import com.soft2242.one.entity.ResponseBody;
@@ -29,8 +28,8 @@ public class EsOpenUtil {
         // updateDevice("Q01866315", "Flobby");
         // getSocketList();
         // getCameraList();
-        System.out.println(getVideoUrl("E95915602"));
-        // changeSocketEnable("Q01866315", 0);
+//        System.out.println(getVideoUrl("E95915602"));
+         changeSocketEnable("Q01866315", 0);
         // getSocketEnable("Q01866315");
     }
 
@@ -221,7 +220,9 @@ public class EsOpenUtil {
      */
     public static String changeSocketEnable(String deviceSerial, Integer cmd) {
         String changeEnableUrl = OpenConstant.YS_DEVICE_URL + DEVICE_URL_PREFIX + deviceSerial + OpenConstant.OUTLET_SWITCH;
-        String response = PostUtils.sendPutWithToken(changeEnableUrl, checkToken(), new BooleanEntity(cmd));
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("data", cmd.equals(1));
+        String response = PostUtils.sendPutWithToken(changeEnableUrl, checkToken(), JSON.toJSONString(requestBody));
         log.info("开/关" + response);
         // return JSON.parseObject(response).getString("code");
         return null;
