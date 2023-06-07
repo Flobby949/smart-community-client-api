@@ -28,6 +28,11 @@ public class RepairVO implements Serializable {
 	@Schema(description = "报修人id")
 	private Long userId;
 	private String userName;
+
+	/**
+	 * 用户类型 0代表用户 1代表管理员
+	 */
+	private String userType;
 	@Schema(description = "报修类别(0:公共报修，1：个人报修)")
 	private Integer type;
 
