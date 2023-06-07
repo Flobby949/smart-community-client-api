@@ -48,7 +48,8 @@ public class AliPayController {
         AlipayClient alipayClient = new DefaultAlipayClient(GATEWAY_URL, aliPayConfig.getAppId(),
                 aliPayConfig.getAppPrivateKey(), FORMAT, CHARSET, aliPayConfig.getAlipayPublicKey(), SIGN_TYPE);
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
-        request.setNotifyUrl(aliPayConfig.getNotifyUrl());
+        request.setNotifyUrl("http://localhost:5173/#/Home");
+        request.setReturnUrl("http://localhost:5173/#/Home");
         request.setBizContent("{\"out_trade_no\":\"" + aliPay.getTraceNo() + "\","
                 + "\"total_amount\":\"" + aliPay.getTotalAmount() + "\","
                 + "\"subject\":\"" + aliPay.getSubject() + "\","
@@ -60,16 +61,32 @@ public class AliPayController {
             e.printStackTrace();
         }
         System.out.println(form);
+        String no = aliPay.getTraceNo();
+        // 查询订单
+        System.out.println("查询订单");
+        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("order_number", no);
+        Order orders = orderMapper.selectOne(queryWrapper);
+
+        if (orders != null) {
+            System.out.println("更新订单");
+            orders.setStatus(1);
+            orders.setPayTime(LocalDateTime.now());
+            orders.setOrderNumber(aliPay.getTraceNo());
+            orderMapper.updateById(orders);
+        }
         httpResponse.setContentType("text/html;charset=" + CHARSET);
 
         httpResponse.getWriter().write(form);// 直接将完整的表单html输出到页面
         httpResponse.getWriter().flush();
         httpResponse.getWriter().close();
+        // 支付成功后，支付宝会回调notify_url指定的接口
 
     }
 
     @PostMapping("/notify")  // 注意这里必须是POST接口
     public String payNotify(HttpServletRequest request) throws Exception {
+        System.out.println("=========支付宝异步回调========");
         if (request.getParameter("trade_status").equals("TRADE_SUCCESS")) {
             System.out.println("=========支付宝异步回调========");
 
