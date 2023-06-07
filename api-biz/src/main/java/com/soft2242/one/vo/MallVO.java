@@ -93,4 +93,8 @@ public class MallVO implements Serializable {
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
 
+
+    @Schema(description = "社区名称")
+    private String communityName;
+
 }
