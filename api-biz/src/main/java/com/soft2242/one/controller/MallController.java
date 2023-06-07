@@ -24,6 +24,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -69,7 +70,7 @@ public class MallController {
         LambdaQueryWrapper<Mall> wrapper = Wrappers.lambdaQuery();
         if (communityId != null)
             wrapper.eq(Mall::getCommunityId, communityId);
-        wrapper.eq(Mall::getDeleted, 0).eq(Mall::getMallStatus, 0);
+        wrapper.eq(Mall::getDeleted, 0);
         List<Mall> list = MallService.list(wrapper);
         List<MallVO> mallVOS = MallConvert.INSTANCE.convertList(list);
         mallVOS.forEach(o -> {
@@ -82,7 +83,7 @@ public class MallController {
     @Operation(summary = "商铺列表By userId")
     public Result<List<MallVO>> listByUserId(@PathVariable Long userId) {
         LambdaQueryWrapper<Mall> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(Mall::getDeleted, 0).eq(Mall::getMallStatus, 0);
+        wrapper.eq(Mall::getDeleted, 0);
 
 //        获取houseid list
         List<OwnerEntity> ownerList = ownerService.list(
@@ -100,21 +101,29 @@ public class MallController {
 
 //        获取communityId list
 //        去除重复
-        List<Long> communities = new ArrayList<>(communityIds);
-        List<MallVO> mallVOS = new ArrayList<>();
+        System.out.println(communityIds);
+        HashSet<Long> communities = new HashSet<>(communityIds);
+        System.out.println(communities);
+        List<MallVO> mallVOS  ;
 
         if (communities.size() == 0) {
             return Result.error("没有找到用户对应的店铺");
 
-        }else {
-            wrapper.in(Mall::getId, communities);
-            List<Mall> list = MallService.list(wrapper);
-             mallVOS = MallConvert.INSTANCE.convertList(list);
+        } else {
+            List<Mall> list =new ArrayList<>();
+            communities.forEach(o -> {
+                wrapper.eq(Mall::getCommunityId, o);
+                list.addAll(MallService.list(wrapper)) ;
+
+            });
+//            去重
+            System.out.println(list );
+            HashSet<Mall> mallSet = new HashSet<>(list);
+            mallVOS = MallConvert.INSTANCE.convertList(new ArrayList<>(mallSet));
             mallVOS.forEach(o -> {
                 o.setCommunityName(communityService.getById(o.getCommunityId()).getCommunityName());
             });
         }
-
         return Result.ok(mallVOS);
     }
 
