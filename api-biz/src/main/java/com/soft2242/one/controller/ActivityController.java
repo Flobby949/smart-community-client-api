@@ -21,8 +21,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 社区活动
- *
  * @author 软件2242 soft2242@gmail.com
  * @since 1.0.0 2023-05-25
  */
