@@ -53,6 +53,12 @@
             <artifactId>freemarker</artifactId>
             <version>2.3.31</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.soft2242.one</groupId>
+            <artifactId>device-plugin</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>
