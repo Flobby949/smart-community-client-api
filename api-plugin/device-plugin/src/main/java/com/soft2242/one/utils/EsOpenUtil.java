@@ -6,6 +6,7 @@ import com.soft2242.one.constant.OpenConstant;
 import com.soft2242.one.entity.BooleanEntity;
 import com.soft2242.one.entity.DeviceResponse;
 import com.soft2242.one.entity.OpenAccessToken;
+import com.soft2242.one.entity.ResponseBody;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,13 +23,18 @@ public class EsOpenUtil {
     public static void main(String[] args) {
         // System.out.println(checkToken());
         // searchDeviceInfo("Q01866315");
+        // checkDeviceEnable(OpenConstant.APP_KEY, "CS-T30-10A", "V1.2.1 build 191106");
         // addDevice("Q01866315", "WJBTLN");
         // deleteDevice("Q01866315");
         // updateDevice("Q01866315", "Flobby");
         // getSocketList();
-        changeSocketEnable("Q01866315", 0);
+        // getCameraList();
+        System.out.println(getVideoUrl("E95915602"));
+        // changeSocketEnable("Q01866315", 0);
         // getSocketEnable("Q01866315");
     }
+
+    static final String DEVICE_URL_PREFIX = "/otap/prop/";
 
     /**
      * 获取Token
@@ -39,11 +45,14 @@ public class EsOpenUtil {
         map.put("appKey", OpenConstant.APP_KEY);
         map.put("appSecret", OpenConstant.APP_SECRET);
         String response = PostUtils.sendPost(getTokenUrl, map);
+        log.info(response);
         JSONObject jsonObject = JSON.parseObject(response);
         if ("200".equals(jsonObject.getString("code"))) {
             OpenAccessToken data = jsonObject.getObject("data", OpenAccessToken.class);
             OpenConstant.OPEN_ACCESS_TOKEN = data.getAccessToken();
             OpenConstant.OPEN_EXPIRE_TIME = System.currentTimeMillis() + 86400;
+        } else {
+            log.error("Token 获取失败");
         }
     }
 
@@ -79,6 +88,35 @@ public class EsOpenUtil {
         map.put("deviceSerial", deviceSerial);
         String response = PostUtils.sendPost(getSearchUrl, map);
         log.info(response);
+    }
+
+    public static void checkDeviceEnable(String appKey, String model, String version) {
+        String getSearchUrl = OpenConstant.YS_OPEN_URL + OpenConstant.DEVICE_IS_ENABLE;
+        Map<String, Object> map = new HashMap<>(3);
+        map.put("accessToken", checkToken());
+        map.put("appKey", appKey);
+        map.put("model", model);
+        map.put("version", version);
+        String response = PostUtils.sendPost(getSearchUrl, map);
+        log.info(response);
+    }
+
+    public static void getCameraList() {
+        String getSearchUrl = OpenConstant.YS_OPEN_URL + OpenConstant.CAMERA_LIST;
+        Map<String, Object> map = new HashMap<>(3);
+        map.put("accessToken", checkToken());
+        String response = PostUtils.sendPost(getSearchUrl, map);
+        log.info(response);
+    }
+
+    public static ResponseBody getVideoUrl(String serialNumber) {
+        String getSearchUrl = OpenConstant.YS_OPEN_URL + OpenConstant.GET_LIVE_ADDRESS;
+        Map<String, Object> map = new HashMap<>(3);
+        map.put("accessToken", checkToken());
+        map.put("deviceSerial", serialNumber);
+        map.put("protocol", 2);
+        String response = PostUtils.sendPost(getSearchUrl, map);
+        return JSON.parseObject(response, ResponseBody.class);
     }
 
     /**
@@ -168,7 +206,7 @@ public class EsOpenUtil {
      * @return string
      */
     public static String getSocketEnable(String deviceSerial) {
-        String changeEnableUrl = OpenConstant.YS_DEVICE_URL + deviceSerial + OpenConstant.OUTLET_SWITCH;
+        String changeEnableUrl = OpenConstant.YS_DEVICE_URL + DEVICE_URL_PREFIX + deviceSerial + OpenConstant.OUTLET_SWITCH;
         String response = PostUtils.sendGet(changeEnableUrl, checkToken());
         log.info("开关状态" + response);
         return null;
@@ -182,7 +220,7 @@ public class EsOpenUtil {
      * @return string
      */
     public static String changeSocketEnable(String deviceSerial, Integer cmd) {
-        String changeEnableUrl = OpenConstant.YS_DEVICE_URL + deviceSerial + OpenConstant.OUTLET_SWITCH;
+        String changeEnableUrl = OpenConstant.YS_DEVICE_URL + DEVICE_URL_PREFIX + deviceSerial + OpenConstant.OUTLET_SWITCH;
         String response = PostUtils.sendPutWithToken(changeEnableUrl, checkToken(), new BooleanEntity(cmd));
         log.info("开/关" + response);
         // return JSON.parseObject(response).getString("code");

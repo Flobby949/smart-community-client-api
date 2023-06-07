@@ -29,11 +29,15 @@ public class OpenConstant {
     /**
      * 萤石云开发平台设备操作URL
      */
-    final public static String YS_DEVICE_URL = "https://open.ys7.com/api/v3/otap/prop/";
+    final public static String YS_DEVICE_URL = "https://open.ys7.com/api/v3";
     /**
      * 开放平台获取用户TOKEN
      */
     final public static String GET_OPEN_ACCESS_TOKEN = "/token/get";
+    /**
+     * 校验是否支持协议
+     */
+    final public static String DEVICE_IS_ENABLE = "/device/support/ezviz";
     /**
      * 添加设备
      */
@@ -62,4 +66,8 @@ public class OpenConstant {
      * 监控视频列表
      */
     final public static String CAMERA_LIST = "/camera/list";
+    /**
+     * 获取视频播放地址
+     */
+    final public static String GET_LIVE_ADDRESS = "/v2/live/address/get";
 }
