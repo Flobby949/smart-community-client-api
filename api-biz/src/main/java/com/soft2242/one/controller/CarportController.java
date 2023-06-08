@@ -44,8 +44,7 @@ public class CarportController {
     @Operation(summary = "修改车位绑定业主")
     //@PreAuthorize("hasAuthority('sys:carport:update')")
     public Result<String> update() {
-        Long userId = SecurityUser.getUserId();
-        carportService.update(userId);
+        carportService.update();
         return Result.ok();
     }
 

@@ -20,7 +20,7 @@ import java.util.Objects;
 public interface CarportDao extends BaseDao<Carport> {
 
     List<CarportVO> getList(Long ownerId);
-    int update(Long ownerId);
+    void update(Long userId);
 
     Long  getOwnerId(@Param("realName") String name,@Param("phone") String phone);
 

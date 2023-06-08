@@ -1,5 +1,6 @@
 package com.soft2242.one.service;
 
+import com.baomidou.mybatisplus.extension.conditions.update.UpdateChainWrapper;
 import com.soft2242.one.entity.Carport;
 import com.soft2242.one.mybatis.service.BaseService;
 import com.soft2242.one.vo.CarportVO;
@@ -24,8 +25,9 @@ public interface CarportService extends BaseService<Carport> {
      * 修改车位绑定
      *
      * @param
+     * @return
      */
-    void update(Long ownerId);
+    UpdateChainWrapper<Carport> update();
 
     /**
      * 新增车位

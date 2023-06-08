@@ -1,6 +1,6 @@
 package com.soft2242.one.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.UpdateChainWrapper;
 import com.soft2242.one.common.exception.ServerException;
 import com.soft2242.one.convert.CarportConvert;
 import com.soft2242.one.dao.CarportDao;
@@ -39,10 +39,12 @@ public class CarportServiceImpl extends BaseServiceImpl<CarportDao, Carport> imp
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(Long ownerId) {
-        LambdaQueryWrapper<Carport> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Carport::getOwnerId, ownerId);
-        carportDao.update(ownerId);
+    public UpdateChainWrapper<Carport> update() {
+//        LambdaQueryWrapper<Carport> queryWrapper = new LambdaQueryWrapper<>();
+//        queryWrapper.eq(Carport::getOwnerId, ownerId);
+        Long userId = SecurityUser.getUserId();
+        carportDao.update(userId);
+        return null;
     }
 
     @Override
