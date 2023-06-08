@@ -35,6 +35,7 @@ import java.util.Map;
 public class RepairServiceImpl extends BaseServiceImpl<RepairDao, RepairEntity> implements RepairService {
 
     private final RepairDao repairDao;
+
     @Override
     public PageResult<RepairVO> page(RepairQuery query) {
         Map<String, Object> map = new HashMap<>();
@@ -56,7 +57,9 @@ public class RepairServiceImpl extends BaseServiceImpl<RepairDao, RepairEntity> 
         map.put("repairId", rid);
         List<RepairVO> list = repairDao.getList(map);
         for (RepairVO repairVO : list) {
-            String[] eids = repairVO.getEmployees().split(",");
+            String employees = repairVO.getEmployees();
+            String[] eids = MyUtils.convertToArray(employees);
+//            String[] eids =employees.split(",");
             repairVO.setHandlerName(repairDao.getHandlerName(eids));
         }
         if (list != null && list.size() > 0) {
@@ -65,12 +68,12 @@ public class RepairServiceImpl extends BaseServiceImpl<RepairDao, RepairEntity> 
         return null;
     }
 
-    private LambdaQueryWrapper<RepairEntity> getWrapper(RepairQuery query){
+    private LambdaQueryWrapper<RepairEntity> getWrapper(RepairQuery query) {
         LambdaQueryWrapper<RepairEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.in(ArrayUtils.isNotEmpty(query.getCommunityId()),RepairEntity::getCommunityId, query.getCommunityId());
+        wrapper.in(ArrayUtils.isNotEmpty(query.getCommunityId()), RepairEntity::getCommunityId, query.getCommunityId());
         wrapper.like(StringUtils.isNotEmpty(query.getTitle()), RepairEntity::getTitle, query.getTitle());
-        wrapper.eq(StringUtils.isNotEmpty(query.getState()) , RepairEntity::getState, query.getState());
-        wrapper.eq(StringUtils.isNotEmpty(query.getType()) , RepairEntity::getType, query.getType());
+        wrapper.eq(StringUtils.isNotEmpty(query.getState()), RepairEntity::getState, query.getState());
+        wrapper.eq(StringUtils.isNotEmpty(query.getType()), RepairEntity::getType, query.getType());
 //        wrapper.ge(query.getCreateTime() != null,RepairEntity::getCreateTime, query.getCreateTime());
         wrapper.between(ArrayUtils.isNotEmpty(query.getCreateTime()), RepairEntity::getCreateTime, ArrayUtils.isNotEmpty(query.getCreateTime()) ? query.getCreateTime()[0] : null, ArrayUtils.isNotEmpty(query.getCreateTime()) ? query.getCreateTime()[1] : null);
         return wrapper;
