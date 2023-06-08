@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,10 +51,14 @@ public class RepairServiceImpl extends BaseServiceImpl<RepairDao, RepairEntity> 
     }
 
     @Override
-    public RepairVO getById2(String id) {
+    public RepairVO getById2(String rid) {
         Map<String, Object> map = new HashMap<>();
-        map.put("communityId", id);
+        map.put("repairId", rid);
         List<RepairVO> list = repairDao.getList(map);
+        for (RepairVO repairVO : list) {
+            String[] eids = repairVO.getEmployees().split(",");
+            repairVO.setHandlerName(repairDao.getHandlerName(eids));
+        }
         if (list != null && list.size() > 0) {
             return list.get(0);
         }

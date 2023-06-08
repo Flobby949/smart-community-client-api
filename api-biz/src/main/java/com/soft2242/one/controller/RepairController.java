@@ -54,11 +54,12 @@ public class RepairController {
         return Result.ok(page);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("{rid}")
     @Operation(summary = "信息")
 //    @PreAuthorize("hasAuthority('soft2242:repair:info')")
-    public Result<RepairVO> get(@PathVariable("id") Long id) {
-        RepairVO vo = repairService.getById2(String.valueOf(id));
+    public Result<RepairVO> get(@PathVariable("rid") Long rid) {
+        RepairVO vo = repairService.getById2(String.valueOf(rid));
+
         String imgs = vo.getImgsd();
         vo.setImgs(MyUtils.convertToArray(imgs));
         return Result.ok(vo);

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
 * 报修表
@@ -28,6 +29,8 @@ public class RepairVO implements Serializable {
 	@Schema(description = "报修人id")
 	private Long userId;
 	private String userName;
+	@Schema(description = "处理人姓名")
+	private List<String> handlerName;
 
 	/**
 	 * 用户类型 0代表用户 1代表管理员

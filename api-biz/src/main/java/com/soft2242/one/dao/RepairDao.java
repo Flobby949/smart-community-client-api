@@ -6,6 +6,7 @@ import com.soft2242.one.mybatis.dao.BaseDao;
 import com.soft2242.one.vo.NoticeVO;
 import com.soft2242.one.vo.RepairVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -19,4 +20,6 @@ import java.util.Map;
 @Mapper
 public interface RepairDao extends BaseDao<RepairEntity> {
     List<RepairVO> getList(Map<String, Object> map);
+
+    List<String> getHandlerName(@Param("ids") String[] ids);
 }

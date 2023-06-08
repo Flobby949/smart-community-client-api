@@ -53,9 +53,19 @@
         <if test="state != null and state.trim() != ''">
             and t1.state = #{state}
         </if>
-        <if test="communityId != null and communityId.length != 0">
-            and t1.community_id in (#{communityId})
+        <if test="repairId != null">
+            and t1.id in (#{repairId})
         </if>
+    </select>
+
+    <select id="getHandlerName" resultType="java.lang.String">
+        select sai.REAL_NAME
+        FROM sys_admin_info sai
+        WHERE sai.ADMIN_ID IN
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+        and sai.deleted = 0
     </select>
 
     <!--
@@ -77,4 +87,8 @@
             and t4.deleted = 0
     -->
 
+    <!--    CASE-->
+    <!--    WHEN t1.user_type = 1 THEN t4.real_name-->
+    <!--    WHEN t1.user_type = 0 THEN t5.real_name-->
+    <!--    END AS userName-->
 </mapper>
