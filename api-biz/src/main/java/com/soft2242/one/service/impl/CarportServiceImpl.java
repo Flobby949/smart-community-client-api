@@ -6,6 +6,7 @@ import com.soft2242.one.convert.CarportConvert;
 import com.soft2242.one.dao.CarportDao;
 import com.soft2242.one.entity.Carport;
 import com.soft2242.one.mybatis.service.impl.BaseServiceImpl;
+import com.soft2242.one.security.user.SecurityUser;
 import com.soft2242.one.service.CarportService;
 import com.soft2242.one.vo.CarportVO;
 import lombok.AllArgsConstructor;
@@ -28,10 +29,11 @@ public class CarportServiceImpl extends BaseServiceImpl<CarportDao, Carport> imp
     private final CarportDao carportDao;
 
     @Override
-    public List<CarportVO> myPort(Long ownerId) {
-        LambdaQueryWrapper<Carport> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Carport::getOwnerId, ownerId);
-        List<CarportVO> list = carportDao.getList(ownerId);
+    public List<CarportVO> myPort() {
+//        LambdaQueryWrapper<Carport> queryWrapper = new LambdaQueryWrapper<>();
+//        queryWrapper.eq(Carport::getOwnerId, ownerId);
+        Long userId = SecurityUser.getUserId();
+        List<CarportVO> list = carportDao.getList(userId);
         return list;
     }
 

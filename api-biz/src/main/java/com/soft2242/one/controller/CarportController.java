@@ -35,7 +35,8 @@ public class CarportController {
     @Operation(summary = "查询当前登录用户的车位信息")
     public Result<List<CarportVO>> myPort() {
         Long userId = SecurityUser.getUserId();
-        List<CarportVO> list = carportService.myPort(userId);
+        //通过userId找到所有已经认真成功的ownerid
+        List<CarportVO> list = carportService.myPort();
         return Result.ok(list);
 
     }
