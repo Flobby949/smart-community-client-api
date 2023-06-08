@@ -60,7 +60,10 @@ public class RepairServiceImpl extends BaseServiceImpl<RepairDao, RepairEntity> 
             String employees = repairVO.getEmployees();
             String[] eids = MyUtils.convertToArray(employees);
 //            String[] eids =employees.split(",");
-            repairVO.setHandlerName(repairDao.getHandlerName(eids));
+            if (eids != null){
+                repairVO.setHandlerName(repairDao.getHandlerName(eids));
+            }
+
         }
         if (list != null && list.size() > 0) {
             return list.get(0);
