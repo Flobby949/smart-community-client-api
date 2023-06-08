@@ -7,22 +7,23 @@ import com.soft2242.one.common.utils.PageResult;
 import com.soft2242.one.common.utils.Result;
 import com.soft2242.one.convert.VisitorConvert;
 import com.soft2242.one.convert.VisitorInvitationConvert;
-import com.soft2242.one.entity.House;
-import com.soft2242.one.entity.OwnerEntity;
-import com.soft2242.one.entity.Visitor;
-import com.soft2242.one.entity.VisitorInvitation;
+import com.soft2242.one.entity.*;
 import com.soft2242.one.query.VisitorQuery;
 import com.soft2242.one.service.*;
+import com.soft2242.one.vo.UserCommunityVO;
 import com.soft2242.one.vo.VisitorInvitationVO;
 import com.soft2242.one.vo.VisitorVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.ElementKind;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public class VisitorController {
     private final IVisitorInvitationService visitorInvitationService;
     private final OwnerService ownerService;
     private final CommunityService communityService;
-    private final  HouseService houseService;
+    private final HouseService houseService;
 
     private String changeForm(LocalDateTime create, LocalDateTime end) {
         return create.toString().substring(0, 10) + "~" + end.toString().substring(0, 10);
@@ -68,9 +69,9 @@ public class VisitorController {
         List<VisitorInvitationVO> invitaionVOs = VisitorInvitationConvert.INSTANCE.convertList(visitorInvitationService.getAll2(userId));
         invitaionVOs.forEach(o -> {
             House house = houseService.getById(o.getHouseId());
-            if (house!= null){
+            if (house != null) {
 //                插入房屋信息 插入社区名
-                o.setHouseInfo(house.getCommunityName()+"小区"+house.getBuildingName()+house.getUnits()+"单元"+house.getHouseNumber()+"室");
+                o.setHouseInfo(house.getCommunityName() + "小区" + house.getBuildingName() + house.getUnits() + "单元" + house.getHouseNumber() + "室");
 //                插入闸机
                 String[] doors = o.getDoorIds().split(",");
                 o.setGates(doors);
@@ -106,7 +107,7 @@ public class VisitorController {
     @PostMapping("addHistory")
     @Operation(summary = "生成访客邀请记录")
     public Result<String> createHistory(@Valid @RequestBody VisitorInvitationVO vo) {
-        Long ownerId ,visitorId ,houseId;
+        Long ownerId, visitorId, houseId;
 //        获取ownerId
         LambdaQueryWrapper<OwnerEntity> query = Wrappers.lambdaQuery();
         List<OwnerEntity> list = null;
@@ -129,10 +130,10 @@ public class VisitorController {
             this.create(add);
 //            获取visitorId
             LambdaQueryWrapper<Visitor> wrapper = Wrappers.lambdaQuery();
-            wrapper.eq(Visitor::getName,vo.getVisitorName());
+            wrapper.eq(Visitor::getName, vo.getVisitorName());
             List<Visitor> visitors = visitorService.list(wrapper);
 
-            visitorId = visitors.get(visitors.size()-1).getId();
+            visitorId = visitors.get(visitors.size() - 1).getId();
         } catch (Exception e) {
             return Result.error("请输入完整信息");
         }
@@ -147,7 +148,7 @@ public class VisitorController {
 
     @PutMapping("status/{id}")
     @Operation(summary = "失效客开门状态")
-    public Result<String> updateById(@Valid@PathVariable Long id) {
+    public Result<String> updateById(@Valid @PathVariable Long id) {
 //        visitorService.update(vo);
         VisitorInvitation entity = visitorInvitationService.getById(id);
         entity.setStatus(1);
@@ -158,7 +159,7 @@ public class VisitorController {
     @GetMapping("gateOpenHistoryList/{userId}")
     @Operation(summary = "访客开门列表")
     public Result<List<VisitorVO>> getGateOpenHistoryByUserId(@PathVariable Long userId) {
-        Long ownerId ,houseId;
+        Long ownerId, houseId;
 
         LambdaQueryWrapper<OwnerEntity> ownerWrapper = Wrappers.lambdaQuery();
         List<OwnerEntity> list = null;
@@ -179,6 +180,72 @@ public class VisitorController {
 
         List<VisitorVO> visitorVOS = VisitorConvert.INSTANCE.convertList(openList);
         return Result.ok(visitorVOS);
+    }
+
+    @GetMapping("getCommunityList/{userId}")
+    @Operation(summary = "根据userId获取社区列表")
+    public Result<List<UserCommunityVO>> getCommunityList(@PathVariable Long userId) {
+        List<OwnerEntity> list = ownerService.list(Wrappers.lambdaQuery(OwnerEntity.class).eq(OwnerEntity::getUserId,userId));
+
+//        .eq(OwnerEntity::getState, 1).eq(OwnerEntity::getDeleted, 0)
+//        List<OwnerEntity> ownerList = ownerService.list(list);
+
+        System.out.println(list);
+
+        List<Long> houseIds = new ArrayList<>();
+        if (list.size() > 0) {
+//            获取 房屋id
+
+            list.forEach(e -> {
+                LambdaQueryWrapper<House> houseWrapper = Wrappers.lambdaQuery(House.class)
+                        .eq(House::getDeleted, 0)
+                        .eq(House::getHouseStatus, 1);
+                List<House> houseList = houseService.list(houseWrapper.eq(House::getId, e.getHouseId()));
+                System.out.println(houseList);
+                houseList.forEach(h -> {
+                    houseIds.add(h.getId());
+                });
+            });
+//            去除重复
+            HashSet<Long> houseList = new HashSet<>();
+
+            if (houseIds.size() > 0) {
+                houseList = new HashSet<>(houseIds);
+
+                System.out.println(houseList);
+                List<House> houseIdList = houseService.list(Wrappers.lambdaQuery(House.class)
+                        .eq(House::getDeleted, 0).eq(House::getHouseStatus, 1)
+                        .in(House::getId, houseList));
+                List<Long> CIds = new ArrayList<>();
+
+                houseIdList.forEach(c -> {
+                    CIds.add(c.getCommunityId());
+                });
+
+
+//            获取社区id
+                HashSet<Long> communityIdList = new HashSet<>(CIds);
+                List<UserCommunityVO> communityVOS = new ArrayList<>();
+                communityService.listByIds(communityIdList).forEach(c -> {
+                    communityVOS.add(new UserCommunityVO(c.getId(), c.getCommunityName()));
+                });
+
+                return Result.ok(communityVOS);
+            }else {
+                return Result.error("未找到社区,您可能不是业主");
+
+            }
+        } else {
+            return Result.error("未找到社区,您可能不是业主");
+        }
+
+    }
+    @GetMapping("ownerList/{userId}")
+    @Operation(summary = "owner")
+    public Result<List<OwnerEntity>> ownerList(@PathVariable Long userId) {
+
+        List<OwnerEntity> list = ownerService.list(Wrappers.lambdaQuery(OwnerEntity.class).eq(OwnerEntity::getUserId,userId));
+        return Result.ok(list);
     }
 
 }
