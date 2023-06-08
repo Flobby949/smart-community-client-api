@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.soft2242.one.dao.CarportDao">
     <update id="update">
-        UPDATE t_carport t1 SET t1.owner_id = 0  WHERE t1.deleted = 0 AND t1.owner_id = #{ownerId}
+        UPDATE t_carport t1 SET t1.owner_id = 0  WHERE t1.deleted = 0 AND t1.owner_id
+        IN (select id from t_owner  where deleted = 0 and state = 1 and user_id = #{userId})
     </update>
 
 
