@@ -19,7 +19,7 @@ public interface CarportService extends BaseService<Carport> {
      *
      * @return list
      */
-    List<CarportVO> myPort(Long ownerId);
+    List<CarportVO> myPort();
     /**
      * 修改车位绑定
      *

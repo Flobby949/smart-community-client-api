@@ -7,13 +7,12 @@
 
 
     <select id="getList" resultType="com.soft2242.one.vo.CarportVO">
-        SELECT t1.* , t2.real_name , t2.phone,t3.licence ,t4.park_name, t4.address
-        FROM t_carport t1
-        LEFT JOIN t_owner t2 ON t2.id = t1.owner_id
-        LEFT JOIN t_car t3 ON t3.id = t1.car_id
-        LEFT JOIN t_park t4 ON t4.id = t1.park_id
-        WHERE	t1.deleted = 0
-        AND t1.owner_id = #{ownerId}
+            select t1.*, t2.real_name , t2.phone,t3.licence ,t4.park_name, t4.address from t_carport t1
+            LEFT JOIN t_owner t2 ON t2.id = t1.owner_id
+            LEFT JOIN t_car t3 ON t3.id = t1.car_id
+            LEFT JOIN t_park t4 ON t4.id = t1.park_id
+                         where t1.deleted=0 and t1.status!=0 and t1.owner_id in
+            (select id from t_owner  where deleted = 0 and state = 1 and user_id = #{userId})
     </select>
     <select id="getOwnerId" resultType="java.lang.Long">
         SELECT t1.id from t_owner t1
@@ -26,4 +25,12 @@
         WHERE t1.deleted=0
           AND t1.licence=#{licence}
     </select>
+<!--    select * from t_carport tc where deleted=0 and status!=0 and owner_id in(select t1.id from t_owner t1 where deleted = 0 and state = 1 and user_id = 8)-->
+<!--    &#45;&#45;         SELECT t1.* , t2.real_name , t2.phone,t3.licence ,t4.park_name, t4.address-->
+<!--    &#45;&#45;         FROM t_carport t1-->
+<!--    &#45;&#45;         LEFT JOIN t_owner t2 ON t2.id = t1.owner_id-->
+<!--    &#45;&#45;         LEFT JOIN t_car t3 ON t3.id = t1.car_id-->
+<!--    &#45;&#45;         LEFT JOIN t_park t4 ON t4.id = t1.park_id-->
+<!--    &#45;&#45;         WHERE	t1.deleted = 0-->
+<!--    &#45;&#45;         AND t1.owner_id = #{ownerId}-->
 </mapper>
