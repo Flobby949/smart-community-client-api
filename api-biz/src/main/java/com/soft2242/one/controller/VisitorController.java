@@ -168,18 +168,29 @@ public class VisitorController {
                     .eq(OwnerEntity::getState, 1)
                     .eq(OwnerEntity::getDeleted, 0);
             list = ownerService.list(ownerWrapper);
-            ownerId = list.get(0).getId();
-            houseId = list.get(0).getHouseId();
+            List<Long> ownerIds = new ArrayList<>();
+            if (list.size() > 0) {
+                list.forEach(e -> {
+                    ownerIds.add(e.getId());
+                });
+            }
+
+            System.out.println(ownerIds);
+//            List<Visitor> openList = visitorService.list(wrapper.in(Visitor::getOwnerId, ownerIds).eq(Visitor::getStatus, 1));
+            List<Visitor> openList = new ArrayList<>();
+            ownerIds.forEach(e -> {
+                openList.addAll(visitorService.list(Wrappers.lambdaQuery(Visitor.class).eq(Visitor::getOwnerId, e)));
+            });
+            System.out.println(openList);
+            List<VisitorVO> visitorVOS = VisitorConvert.INSTANCE.convertList(openList);
+            return Result.ok(visitorVOS);
+//            houseId = list.get(0).getHouseId();
         } catch (Exception e) {
             e.printStackTrace();
             return Result.error("登录账户没有邀请权限，您不是业主");
         }
 
-        LambdaQueryWrapper<Visitor> wrapper = Wrappers.lambdaQuery();
-        List<Visitor> openList = visitorService.list(wrapper.eq(Visitor::getOwnerId, ownerId).eq(Visitor::getStatus, 1));
 
-        List<VisitorVO> visitorVOS = VisitorConvert.INSTANCE.convertList(openList);
-        return Result.ok(visitorVOS);
     }
 
     @GetMapping("getCommunityList/{userId}")
